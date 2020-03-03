@@ -129,3 +129,11 @@ h1 {
     text-align: center;
     cursor: pointer;
 }
+
+.score-style {
+    margin-top: 2rem;
+    font-family: League Spartan;
+    font-size: 1rem;
+    text-align: center;
+    cursor: pointer;
+}

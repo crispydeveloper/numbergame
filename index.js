@@ -36,6 +36,8 @@ var controller = (function(numberCtrl, UICtrl) {
     var findNum;
     var endBoolean = 0;
     var id;
+    var score = 0;
+    var index = 3;
 
     var setupEventListeners = function() {
         document.addEventListener('dblclick', e => e.preventDefault());
@@ -84,6 +86,7 @@ var controller = (function(numberCtrl, UICtrl) {
               if (width <= 0) {
                 clearInterval(id);
                 i = 0;
+                endBoolean = 1;
                 endRound();
               } else {
                 width--;
@@ -101,16 +104,36 @@ var controller = (function(numberCtrl, UICtrl) {
         } else if(endBoolean == 1) {
             console.log("Game End - No Solution");
             clearInterval(id);
+            document.getElementById("submit-btn").textContent = "NO SOLUTION";
+            document.getElementById("clear-btn").style.display = "none";
             document.getElementById("submit-btn").style.backgroundColor = "#e74c3c";
             document.getElementById("submit-btn").style.color = "#ffffff";
             document.getElementById("new-btn").style.display = "block";
-            
+
+            document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-3").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
+
             document.removeEventListener('click', ctrlSelect);
             document.getElementById("clear-btn").removeEventListener('click', clearAll);
             document.getElementById("submit-btn").removeEventListener('click', endRound)
         } else if(endBoolean == 2) {
             console.log("Game End - Done");
             clearInterval(id);
+
+            if(index == 0) {
+                var ans1 = document.getElementById("solution-1").textContent;
+                var ans2 = document.getElementById("solution-2").textContent;
+                var ans3 = document.getElementById("solution-3").textContent;
+                var ans4 = document.getElementById("solution-4").textContent;
+
+                if(ans1 == findNum || ans2 == findNum || ans3 == findNum || ans4 == findNum) {
+                    score++;
+                    document.getElementById("score-number").textContent = "Score: " + score;
+                }
+            }
+
             document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
             document.getElementById("submit-btn").style.color = "#ffffff";
             document.getElementById("new-btn").style.display = "block";
@@ -200,6 +223,8 @@ var controller = (function(numberCtrl, UICtrl) {
                 if(targetElement.id.includes("solution") && targetElement.id != previousNumId) {
                     secondNum = parseInt(targetElement.textContent);
                     targetElement.textContent = (Math.round( calculateResult() * 10 ) / 10);
+                    index--;
+                    console.log(index);
                     if(targetElement.textContent == 0) {
                         document.getElementById(targetElement.id).textContent = "";
                     }
@@ -226,6 +251,7 @@ var controller = (function(numberCtrl, UICtrl) {
         previousNumId = "";
         pos = 0;
         endBoolean = 1;
+        index = 3;
 
         document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
         document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
