@@ -21,10 +21,17 @@ h1 {
     width: auto;
     height: auto;
     background-color: #d8d8d8;
-    padding: 2rem 0 1.5rem 0;
+    /* padding: 2rem 0 1.5rem 0; */
     border-radius: 0.5rem;
     margin-bottom: 1rem;
-    touch-action: manipulation
+    overflow: hidden;
+}
+
+.progress-style {
+    width: 100%;
+    height: 0.5rem;
+    margin: 0rem 0 1.5rem 0;
+    background-color: #e67e22;
 }
 
 .target-title {
@@ -38,6 +45,7 @@ h1 {
     font-family: League Spartan;
     font-size: 3.75rem;
     text-align: center;
+    margin-bottom: 1rem;
 }
 
 .operation-box {
@@ -97,6 +105,8 @@ h1 {
 }
 
 #submit-btn {
+    background-color: #27ae60;
+    color: #ffffff;
     flex-grow: 2;
 }
 

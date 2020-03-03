@@ -35,15 +35,18 @@ var controller = (function(numberCtrl, UICtrl) {
     var solutionNum1, solutionNum2, solutionNum3, solutionNum4;
     var findNum;
     var endBoolean = 0;
+    var id;
 
     var setupEventListeners = function() {
-        document.addEventListener('click', ctrlSelect);
         document.addEventListener('dblclick', e => e.preventDefault());
         document.getElementById("clear-btn").addEventListener('click', clearAll);
         document.getElementById("submit-btn").addEventListener('click', endRound)
     };
 
     var setupGameElements = function() {
+
+        document.addEventListener('click', ctrlSelect);
+
         findNum = Math.floor((Math.random() * 10) + 1);
 
         solutionNum1 = Math.floor((Math.random() * 10) + 1);
@@ -57,10 +60,46 @@ var controller = (function(numberCtrl, UICtrl) {
         document.getElementById("solution-4").textContent = solutionNum4;
 
         document.getElementById("target-number").textContent = findNum;
+
+        document.getElementById("submit-btn").textContent = "NO SOLUTION";
+        document.getElementById("submit-btn").style.backgroundColor = "#d8d8d8";
+        document.getElementById("submit-btn").style.color = "#000000";
+        document.getElementById("clear-btn").style.display = "none";
+
+        startTimer();
+    }
+
+    var startTimer = function() {
+        var i = 0;
+
+        if (i == 0) {
+            i = 1;
+            var elem = document.getElementById("progress-bar");
+            var width = 100;
+            id = setInterval(frame, 300);
+            function frame() {
+              if (width <= 0) {
+                clearInterval(id);
+                i = 0;
+                endRound();
+              } else {
+                width--;
+                elem.style.width = width + "%";
+              }
+            }
+        }
     }
 
     var endRound = function() {
-        // toggleSubmitColor();
+        if(endBoolean == 0) {
+            setupGameElements();
+            endBoolean = 1;
+        } else if(endBoolean == 1) {
+            console.log("Game End - No Solution");
+            clearInterval(id);
+        } else if(endBoolean == 2) {
+            console.log("Game End - Done");
+        }
     }
 
     // var toggleSubmitColor = function() {
@@ -93,6 +132,7 @@ var controller = (function(numberCtrl, UICtrl) {
                     targetElement.style.backgroundColor = "#727272";
                     console.log(firstNum + " is selected.")
                     pos++;
+                    endBoolean = 2;
                 }
                 break;
 
@@ -154,6 +194,7 @@ var controller = (function(numberCtrl, UICtrl) {
         previousOp = "";
         previousNumId = "";
         pos = 0;
+        endBoolean = 1;
 
         document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
         document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
@@ -195,7 +236,6 @@ var controller = (function(numberCtrl, UICtrl) {
     return {
         init: function() {
             setupEventListeners();
-            setupGameElements();
             document.getElementById("clear-btn").style.display = "none";
             console.log('Game has started.');
         },
