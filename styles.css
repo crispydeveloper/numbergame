@@ -1,0 +1,110 @@
+@font-face {
+    font-family: "League Spartan";
+    src: url(fonts/LeagueSpartan-Bold.otf);
+}
+
+h1 {
+    font-family: League Spartan;
+    font-size: 2rem;
+}
+
+,container {
+    padding: 0 1.5rem 0 1.5rem;
+}
+
+.main-box {
+    display: block;
+    width: auto;
+    height: auto;
+    background-color: #d8d8d8;
+    padding: 2rem 0 1.5rem 0;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    touch-action: manipulation
+}
+
+.target-title {
+    font-family: League Spartan;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.target-style {
+    font-family: League Spartan;
+    font-size: 3.75rem;
+    text-align: center;
+}
+
+.operation-box {
+    display: flex;
+    flex-direction: row;
+    margin: 0 -0.5rem;
+    touch-action: manipulation
+}
+
+.operation-options {
+    flex-grow: 1;
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #d8d8d8;
+    font-family: League Spartan;
+    font-size: 2rem;
+    text-align: center;
+    cursor: pointer;
+    touch-action: manipulation
+}
+
+.solution-box {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 -0.25rem 0 -0.25rem;
+    touch-action: manipulation
+}
+
+.solution-item {
+    width: calc(100% * 0.5 - 0.25rem * 2);
+    height: 5rem;
+    margin: 0.25rem;
+    padding-top: 2rem;
+    border-radius: 0.5rem;
+    background-color: #d8d8d8;
+    font-family: League Spartan;
+    font-size: 3rem;
+    text-align: center;
+    cursor: pointer;
+    touch-action: manipulation
+}
+
+.submit-box {
+    display: flex;
+    flex-direction: row;
+    touch-action: manipulation
+}
+
+.submit-item {
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 1.5rem 1rem 1rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #d8d8d8;
+    font-family: League Spartan;
+    font-size: 1.5rem;
+    text-align: center;
+    touch-action: manipulation
+}
+
+.submit-clear {
+    display: none;
+    margin-top: 0.25rem;
+    margin-left: 0.5rem;
+    padding: 1.5rem 1rem 1rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #d8d8d8;
+    font-family: League Spartan;
+    font-size: 1.5rem;
+    text-align: center;
+    touch-action: manipulation
+}
