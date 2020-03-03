@@ -34,11 +34,13 @@ var controller = (function(numberCtrl, UICtrl) {
     var firstNum, secondNum, operationSelect, previousNum, previousOp, previousNumId;
     var solutionNum1, solutionNum2, solutionNum3, solutionNum4;
     var findNum;
+    var endBoolean = 0;
 
     var setupEventListeners = function() {
         document.addEventListener('click', ctrlSelect);
         document.addEventListener('dblclick', e => e.preventDefault());
         document.getElementById("clear-btn").addEventListener('click', clearAll);
+        document.getElementById("submit-btn").addEventListener('click', endRound)
     };
 
     var setupGameElements = function() {
@@ -56,6 +58,22 @@ var controller = (function(numberCtrl, UICtrl) {
 
         document.getElementById("target-number").textContent = findNum;
     }
+
+    var endRound = function() {
+        // toggleSubmitColor();
+    }
+
+    // var toggleSubmitColor = function() {
+    //     if(endBoolean == 0) {
+    //         document.getElementById("submit-btn").style.backgroundColor = "#e67e22";
+    //         document.getElementById("submit-btn").style.color = "#ffffff";
+    //         endBoolean = 1;
+    //     } else {
+    //         document.getElementById("submit-btn").style.backgroundColor = "#d8d8d8";
+    //         document.getElementById("submit-btn").style.color = "#000000";
+    //         endBoolean = 0;
+    //     }
+    // }
 
     var ctrlSelect = function(event) {
         var targetElement = event.target || event.srcElement;
