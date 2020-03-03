@@ -41,9 +41,11 @@ var controller = (function(numberCtrl, UICtrl) {
         document.addEventListener('dblclick', e => e.preventDefault());
         document.getElementById("clear-btn").addEventListener('click', clearAll);
         document.getElementById("submit-btn").addEventListener('click', endRound)
+        document.getElementById("new-btn").addEventListener('click', newRound);
     };
 
     var setupGameElements = function() {
+        endBoolean = 0;
 
         document.addEventListener('click', ctrlSelect);
 
@@ -65,6 +67,7 @@ var controller = (function(numberCtrl, UICtrl) {
         document.getElementById("submit-btn").style.backgroundColor = "#d8d8d8";
         document.getElementById("submit-btn").style.color = "#000000";
         document.getElementById("clear-btn").style.display = "none";
+        document.getElementById("new-btn").style.display = "none";
 
         startTimer();
     }
@@ -92,14 +95,42 @@ var controller = (function(numberCtrl, UICtrl) {
 
     var endRound = function() {
         if(endBoolean == 0) {
+            setupEventListeners();
             setupGameElements();
             endBoolean = 1;
         } else if(endBoolean == 1) {
             console.log("Game End - No Solution");
             clearInterval(id);
+            document.getElementById("submit-btn").style.backgroundColor = "#e74c3c";
+            document.getElementById("submit-btn").style.color = "#ffffff";
+            document.getElementById("new-btn").style.display = "block";
+            
+            document.removeEventListener('click', ctrlSelect);
+            document.getElementById("clear-btn").removeEventListener('click', clearAll);
+            document.getElementById("submit-btn").removeEventListener('click', endRound)
         } else if(endBoolean == 2) {
             console.log("Game End - Done");
+            clearInterval(id);
+            document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
+            document.getElementById("submit-btn").style.color = "#ffffff";
+            document.getElementById("new-btn").style.display = "block";
+
+            document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-3").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
+
+            document.getElementById("clear-btn").removeEventListener('click', clearAll);
+            document.getElementById("submit-btn").removeEventListener('click', endRound)
+
+            document.removeEventListener('click', ctrlSelect);
         }
+    }
+
+    var newRound = function() {
+        setupEventListeners();
+        setupGameElements();
+        endBoolean = 1;
     }
 
     // var toggleSubmitColor = function() {
