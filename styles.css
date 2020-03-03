@@ -3,6 +3,10 @@
     src: url(fonts/LeagueSpartan-Bold.otf);
 }
 
+body {
+    touch-action: manipulation;
+}
+
 h1 {
     font-family: League Spartan;
     font-size: 2rem;
@@ -40,7 +44,6 @@ h1 {
     display: flex;
     flex-direction: row;
     margin: 0 -0.5rem;
-    touch-action: manipulation
 }
 
 .operation-options {
@@ -53,7 +56,6 @@ h1 {
     font-size: 2rem;
     text-align: center;
     cursor: pointer;
-    touch-action: manipulation
 }
 
 .solution-box {
@@ -61,7 +63,6 @@ h1 {
     flex-direction: row;
     flex-wrap: wrap;
     margin: 0 -0.25rem 0 -0.25rem;
-    touch-action: manipulation
 }
 
 .solution-item {
@@ -75,36 +76,30 @@ h1 {
     font-size: 3rem;
     text-align: center;
     cursor: pointer;
-    touch-action: manipulation
 }
 
 .submit-box {
     display: flex;
     flex-direction: row;
-    touch-action: manipulation
+    margin: 0 -0.25rem 0 -0.25rem;
 }
 
 .submit-item {
-    width: 100%;
-    margin-top: 0.25rem;
+    margin: 0.25rem 0.25rem 0 0.25rem;
     padding: 1.5rem 1rem 1rem 1rem;
     border-radius: 0.5rem;
     background-color: #d8d8d8;
     font-family: League Spartan;
-    font-size: 1.5rem;
+    font-size: 1rem;
     text-align: center;
-    touch-action: manipulation
+    justify-content: center;
+    cursor: pointer;
 }
 
-.submit-clear {
-    display: none;
-    margin-top: 0.25rem;
-    margin-left: 0.5rem;
-    padding: 1.5rem 1rem 1rem 1rem;
-    border-radius: 0.5rem;
-    background-color: #d8d8d8;
-    font-family: League Spartan;
-    font-size: 1.5rem;
-    text-align: center;
-    touch-action: manipulation
+#submit-btn {
+    flex-grow: 2;
+}
+
+#clear-btn {
+    flex-grow: 1;
 }

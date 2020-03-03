@@ -32,18 +32,33 @@ var controller = (function(numberCtrl, UICtrl) {
 
     var pos = 0;
     var firstNum, secondNum, operationSelect, previousNum, previousOp, previousNumId;
+    var solutionNum1, solutionNum2, solutionNum3, solutionNum4;
+    var findNum;
 
     var setupEventListeners = function() {
-
-        document.addEventListener('click', ctrlSelect)
+        document.addEventListener('click', ctrlSelect);
+        document.addEventListener('dblclick', e => e.preventDefault());
+        document.getElementById("clear-btn").addEventListener('click', clearAll);
     };
+
+    var setupGameElements = function() {
+        findNum = Math.floor((Math.random() * 10) + 1);
+
+        solutionNum1 = Math.floor((Math.random() * 10) + 1);
+        solutionNum2 = Math.floor((Math.random() * 10) + 1);
+        solutionNum3 = Math.floor((Math.random() * 10) + 1);
+        solutionNum4 = Math.floor((Math.random() * 10) + 1);
+
+        document.getElementById("solution-1").textContent = solutionNum1;
+        document.getElementById("solution-2").textContent = solutionNum2;
+        document.getElementById("solution-3").textContent = solutionNum3;
+        document.getElementById("solution-4").textContent = solutionNum4;
+
+        document.getElementById("target-number").textContent = findNum;
+    }
 
     var ctrlSelect = function(event) {
         var targetElement = event.target || event.srcElement;
-
-        document.getElementById("clear-btn").style.display = "flex";
-
-        document.getElementById("submit-btn").textContent = "DONE";
 
         if(targetElement.textContent == "") {
             return;
@@ -52,6 +67,8 @@ var controller = (function(numberCtrl, UICtrl) {
         switch(pos) {
             case 0:
                 if(targetElement.id.includes("solution")) {
+                    document.getElementById("clear-btn").style.display = "flex";
+                    document.getElementById("submit-btn").textContent = "DONE";
                     firstNum = parseInt(targetElement.textContent);
                     previousNum = targetElement;
                     previousNumId = targetElement.id;
@@ -94,7 +111,10 @@ var controller = (function(numberCtrl, UICtrl) {
                 if(targetElement.id.includes("solution") && targetElement.id != previousNumId) {
                     secondNum = parseInt(targetElement.textContent);
                     targetElement.textContent = (Math.round( calculateResult() * 10 ) / 10);
-                    document.getElementById(previousNumId).textContent = null;
+                    if(targetElement.textContent == 0) {
+                        document.getElementById(targetElement.id).textContent = "";
+                    }
+                    document.getElementById(previousNumId).textContent = "";
                     previousNum.style.backgroundColor = "#d8d8d8";
                     previousOp.style.backgroundColor = "#d8d8d8";
                     pos = 0;
@@ -107,6 +127,36 @@ var controller = (function(numberCtrl, UICtrl) {
                 }
         }
     };
+
+    var clearAll = function() {
+        firstNum = "";
+        secondNum = "";
+        operationSelect = "";
+        previousNum = "";
+        previousOp = "";
+        previousNumId = "";
+        pos = 0;
+
+        document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
+        document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
+        document.getElementById("solution-3").style.backgroundColor = "#d8d8d8";
+        document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
+
+        document.getElementById("operation-1").style.backgroundColor = "#d8d8d8";
+        document.getElementById("operation-2").style.backgroundColor = "#d8d8d8";
+        document.getElementById("operation-3").style.backgroundColor = "#d8d8d8";
+        document.getElementById("operation-4").style.backgroundColor = "#d8d8d8";
+
+        document.getElementById("solution-1").textContent = solutionNum1;
+        document.getElementById("solution-2").textContent = solutionNum2;
+        document.getElementById("solution-3").textContent = solutionNum3;
+        document.getElementById("solution-4").textContent = solutionNum4;
+
+        document.getElementById("clear-btn").style.display = "none";
+        document.getElementById("submit-btn").textContent = "NO SOLUTION";
+
+        console.log("Clear all");
+    }
 
     var calculateResult = function() {
         switch(operationSelect) {
@@ -127,6 +177,8 @@ var controller = (function(numberCtrl, UICtrl) {
     return {
         init: function() {
             setupEventListeners();
+            setupGameElements();
+            document.getElementById("clear-btn").style.display = "none";
             console.log('Game has started.');
         },
 
