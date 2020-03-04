@@ -33,6 +33,7 @@ var controller = (function(numberCtrl, UICtrl) {
     var pos = 0;
     var firstNum, secondNum, operationSelect, previousNum, previousOp, previousNumId;
     var solutionNum1, solutionNum2, solutionNum3, solutionNum4;
+    var operation1, operation2, operation3;
     var findNum;
     var endBoolean = 0; //0 - Game Standby, 1 - Game Begin (No Solution), 2 - Game Begin (Done), 3 - Game Begin (Timeout)
     var id;
@@ -59,8 +60,6 @@ var controller = (function(numberCtrl, UICtrl) {
         solutionNum3 = Math.floor((Math.random() * 10) + 1);
         solutionNum4 = Math.floor((Math.random() * 10) + 1);
 
-        generateAns();
-
         document.getElementById("solution-1").textContent = solutionNum1;
         document.getElementById("solution-2").textContent = solutionNum2;
         document.getElementById("solution-3").textContent = solutionNum3;
@@ -75,10 +74,6 @@ var controller = (function(numberCtrl, UICtrl) {
         document.getElementById("new-btn").style.display = "none";
 
         startTimer();
-    }
-
-    var generateAns = function() {
-        // findNum = Math.floor((Math.random() * 10) + 1);
     }
 
     var startTimer = function() {
