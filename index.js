@@ -34,7 +34,7 @@ var controller = (function(numberCtrl, UICtrl) {
     var firstNum, secondNum, operationSelect, previousNum, previousOp, previousNumId;
     var solutionNum1, solutionNum2, solutionNum3, solutionNum4;
     var findNum;
-    var endBoolean = 0;
+    var endBoolean = 0; //0 - Game Standby, 1 - Game Begin (No Solution), 2 - Game Begin (Done), 3 - Game Begin (Timeout)
     var id;
     var score = 0;
     var index = 3;
@@ -48,6 +48,7 @@ var controller = (function(numberCtrl, UICtrl) {
 
     var setupGameElements = function() {
         endBoolean = 0;
+        index = 3;
 
         document.addEventListener('click', ctrlSelect);
 
@@ -57,6 +58,8 @@ var controller = (function(numberCtrl, UICtrl) {
         solutionNum2 = Math.floor((Math.random() * 10) + 1);
         solutionNum3 = Math.floor((Math.random() * 10) + 1);
         solutionNum4 = Math.floor((Math.random() * 10) + 1);
+
+        generateAns();
 
         document.getElementById("solution-1").textContent = solutionNum1;
         document.getElementById("solution-2").textContent = solutionNum2;
@@ -74,6 +77,10 @@ var controller = (function(numberCtrl, UICtrl) {
         startTimer();
     }
 
+    var generateAns = function() {
+        // findNum = Math.floor((Math.random() * 10) + 1);
+    }
+
     var startTimer = function() {
         var i = 0;
 
@@ -86,7 +93,7 @@ var controller = (function(numberCtrl, UICtrl) {
               if (width <= 0) {
                 clearInterval(id);
                 i = 0;
-                endBoolean = 1;
+                endBoolean = 3;
                 endRound();
               } else {
                 width--;
@@ -121,6 +128,7 @@ var controller = (function(numberCtrl, UICtrl) {
         } else if(endBoolean == 2) {
             console.log("Game End - Done");
             clearInterval(id);
+            console.log("The index is: " + index);
 
             if(index == 0) {
                 var ans1 = document.getElementById("solution-1").textContent;
@@ -130,6 +138,7 @@ var controller = (function(numberCtrl, UICtrl) {
 
                 if(ans1 == findNum || ans2 == findNum || ans3 == findNum || ans4 == findNum) {
                     score++;
+                    console.log("Score is: " + score);
                     document.getElementById("score-number").textContent = "Score: " + score;
                 }
             }
@@ -144,9 +153,25 @@ var controller = (function(numberCtrl, UICtrl) {
             document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
 
             document.getElementById("clear-btn").removeEventListener('click', clearAll);
-            document.getElementById("submit-btn").removeEventListener('click', endRound)
+            document.getElementById("submit-btn").removeEventListener('click', endRound);
 
             document.removeEventListener('click', ctrlSelect);
+        } else if(endBoolean == 3) {
+            console.log("Game End - Time's Up");
+            clearInterval(id);
+            document.getElementById("submit-btn").textContent = "GAME OVER";
+            document.getElementById("clear-btn").style.display = "none";
+            document.getElementById("submit-btn").style.backgroundColor = "#2c3e50";
+            document.getElementById("submit-btn").style.color = "#ffffff";
+
+            document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-3").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
+
+            document.removeEventListener('click', ctrlSelect);
+            document.getElementById("clear-btn").removeEventListener('click', clearAll);
+            document.getElementById("submit-btn").removeEventListener('click', endRound);
         }
     }
 
@@ -155,19 +180,6 @@ var controller = (function(numberCtrl, UICtrl) {
         setupGameElements();
         endBoolean = 1;
     }
-
-    // var toggleSubmitColor = function() {
-    //     if(endBoolean == 0) {
-    //         document.getElementById("submit-btn").style.backgroundColor = "#e67e22";
-    //         document.getElementById("submit-btn").style.color = "#ffffff";
-    //         endBoolean = 1;
-    //     } else {
-    //         document.getElementById("submit-btn").style.backgroundColor = "#d8d8d8";
-    //         document.getElementById("submit-btn").style.color = "#000000";
-    //         endBoolean = 0;
-    //     }
-    // }
-
     var ctrlSelect = function(event) {
         var targetElement = event.target || event.srcElement;
 
@@ -226,6 +238,7 @@ var controller = (function(numberCtrl, UICtrl) {
                     index--;
                     console.log(index);
                     if(targetElement.textContent == 0) {
+                        index--;
                         document.getElementById(targetElement.id).textContent = "";
                     }
                     document.getElementById(previousNumId).textContent = "";
@@ -233,11 +246,20 @@ var controller = (function(numberCtrl, UICtrl) {
                     previousOp.style.backgroundColor = "#d8d8d8";
                     pos = 0;
                 } if(targetElement.id.includes("operation")) {
-                    operationSelect = targetElement.textContent;
-                    previousOp.style.backgroundColor = "#d8d8d8";
-                    previousOp = targetElement;
-                    targetElement.style.backgroundColor = "#727272";
-                    console.log(operationSelect + " is selected.")
+                    if(previousOp == targetElement) {
+                        previousOp = "";
+                        targetElement.style.backgroundColor = "#d8d8d8";
+                        console.log("Operator deselected");
+                        pos--;  
+                    } else {
+                        operationSelect = targetElement.textContent;
+                        if(previousOp !== "") {
+                            previousOp.style.backgroundColor = "#d8d8d8";
+                        }
+                        previousOp = targetElement;
+                        targetElement.style.backgroundColor = "#727272";
+                        console.log(operationSelect + " is selected.")
+                    }
                 }
         }
     };
