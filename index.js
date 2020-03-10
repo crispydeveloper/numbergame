@@ -6,6 +6,7 @@ var endBoolean = 0; //0 - Game Standby, 1 - Game Begin (No Solution), 2 - Game B
 var id;
 var score = 0;
 var index = 3;
+var width = 100;
 
 var setupEventListeners = function() {
     document.addEventListener('dblclick', e => e.preventDefault());
@@ -23,10 +24,29 @@ var setupGameElements = function() {
 
     createQuestion();
 
-    document.getElementById("solution-1").textContent = solutionNum1;
-    document.getElementById("solution-2").textContent = solutionNum2;
-    document.getElementById("solution-3").textContent = solutionNum3;
-    document.getElementById("solution-4").textContent = solutionNum4;
+    var solutionNumbers = [solutionNum1, solutionNum2, solutionNum3, solutionNum4];
+    var solutionBoxIndex = ["solution-1", "solution-2", "solution-3", "solution-4"];
+    
+    var i;
+
+    for (i = 0; i < 4; i++) {
+        var randomSolution = solutionNumbers[Math.floor(Math.random() * solutionNumbers.length)];
+        var solutionIndex = solutionNumbers.indexOf(randomSolution);
+
+        solutionNumbers.splice(solutionIndex, 1);
+
+        var randomBox = solutionBoxIndex[Math.floor(Math.random() * solutionBoxIndex.length)];
+        var boxIndex = solutionBoxIndex.indexOf(randomBox);
+
+        solutionBoxIndex.splice(boxIndex, 1);
+
+        document.getElementById(randomBox).textContent = randomSolution;
+    }
+
+    // document.getElementById("solution-1").textContent = solutionNum1;
+    // document.getElementById("solution-2").textContent = solutionNum2;
+    // document.getElementById("solution-3").textContent = solutionNum3;
+    // document.getElementById("solution-4").textContent = solutionNum4;
 
     document.getElementById("target-number").textContent = findNum;
 
@@ -123,7 +143,6 @@ var startTimer = function() {
     if (i == 0) {
         i = 1;
         var elem = document.getElementById("progress-bar");
-        var width = 100;
         id = setInterval(frame, 300);
         function frame() {
             if (width <= 0) {
@@ -157,6 +176,8 @@ var endRound = function() {
 
             if(ans1 == findNum || ans2 == findNum || ans3 == findNum || ans4 == findNum) {
                 score++;
+                width += 20;
+                document.getElementById("progress-bar").style.width = width + "%";
                 // console.log("Score is: " + score);
                 document.getElementById("score-number").textContent = "Score: " + score;
                 document.getElementById("submit-btn").textContent = "CORRECT";
