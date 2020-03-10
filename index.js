@@ -23,12 +23,7 @@ var controller = (function() {
 
         document.addEventListener('click', ctrlSelect);
 
-        findNum = Math.floor((Math.random() * 10) + 1);
-
-        solutionNum1 = Math.floor((Math.random() * 10) + 1);
-        solutionNum2 = Math.floor((Math.random() * 10) + 1);
-        solutionNum3 = Math.floor((Math.random() * 10) + 1);
-        solutionNum4 = Math.floor((Math.random() * 10) + 1);
+        createQuestion();
 
         document.getElementById("solution-1").textContent = solutionNum1;
         document.getElementById("solution-2").textContent = solutionNum2;
@@ -45,6 +40,25 @@ var controller = (function() {
         document.getElementById("new-btn").style.display = "none";
 
         startTimer();
+    }
+
+    var createQuestion = function() {
+        findNum = Math.floor((Math.random() * 10) + 1);
+
+        solutionNum1 = Math.floor((Math.random() * 10) + 1);
+        solutionNum2 = Math.floor((Math.random() * 10) + 1);
+
+        var firstMath = calculation(solutionNum1, solutionNum2, findNum, 0);
+        console.log(firstMath);
+        
+        solutionNum3 = Math.floor((Math.random() * 10) + 1);
+
+        var secondMath = calculation(firstMath, solutionNum3, findNum, 0);
+        console.log(secondMath);
+
+        solutionNum4 = Math.floor((Math.random() * 10) + 1);
+
+        var lastMath = calculation(secondMath, solutionNum4, findNum, 1);
     }
 
     var startTimer = function() {
@@ -314,5 +328,51 @@ var controller = (function() {
     }
 
 })();
+
+function calculation(a, b, finalResult, last) {
+    var opArray = ['+', '-', '*', '/'];
+    var numberArray = [1,2,3,4,5,6,7,8,9,10];
+
+    var result = 0;
+
+    var math_it_up = {
+        '+' : function(x,y) {return x + y},
+        '-' : function(x,y) {return x - y},
+        '*' : function(x,y) {return x * y},
+        '/' : function(x,y) {return x / y}
+    };
+
+    if(last) {
+        while(result != finalResult) {
+            var randomOp = opArray[Math.floor(Math.random() * opArray.length)];
+
+            result = math_it_up[randomOp](a, b);
+
+            if(result != finalResult) {
+                var index = opArray.indexOf(randomOp);
+
+                opArray.splice(index, 1)
+
+                if(opArray.length == 0) {
+                    opArray = ['+', '-', '*', '/'];
+
+                    var numberIndex = numberArray.indexOf(b);
+
+                    numberArray.splice(numberIndex, 1);
+
+                    b = numberArray[Math.floor(Math.random() * numberArray.length)];
+                }
+            }
+        }
+    } else {
+        while(result == 0 || result < 0 || result % 1 != 0) {
+            var randomOp = opArray[Math.floor(Math.random() * 4)];
+    
+            result = math_it_up[randomOp](a, b);
+        }
+    }
+
+    return result;
+}
 
 controller.init();
