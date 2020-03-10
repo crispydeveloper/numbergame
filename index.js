@@ -1,39 +1,8 @@
-var numberController = (function () {
-    
-})();
-
-var UIController = (function() {
-
-    var DOMstrings = {
-        input1: 'solution-1',
-        input2: 'solution-2',
-        input3: 'solution-3',
-        input4: 'solution-4'
-    }
-    
-    return {
-        getInput: function() {
-            return {
-                number1: document.getElementById(DOMstrings.input1).textContent,
-                number2: document.getElementById(DOMstrings.input2).textContent,
-                number3: document.getElementById(DOMstrings.input3).textContent,
-                number4: document.getElementById(DOMstrings.input4).textContent,
-            };
-        },
-
-        getDOMstrings: function() {
-            return DOMstrings;
-        }
-    };
-
-})();
-
-var controller = (function(numberCtrl, UICtrl) {
+var controller = (function() {
 
     var pos = 0;
     var firstNum, secondNum, operationSelect, previousNum, previousOp, previousNumId;
     var solutionNum1, solutionNum2, solutionNum3, solutionNum4;
-    var operation1, operation2, operation3;
     var findNum;
     var endBoolean = 0; //0 - Game Standby, 1 - Game Begin (No Solution), 2 - Game Begin (Done), 3 - Game Begin (Timeout)
     var id;
@@ -50,6 +19,7 @@ var controller = (function(numberCtrl, UICtrl) {
     var setupGameElements = function() {
         endBoolean = 0;
         index = 3;
+        pos = 0;
 
         document.addEventListener('click', ctrlSelect);
 
@@ -68,8 +38,9 @@ var controller = (function(numberCtrl, UICtrl) {
         document.getElementById("target-number").textContent = findNum;
 
         document.getElementById("submit-btn").textContent = "NO SOLUTION";
-        document.getElementById("submit-btn").style.backgroundColor = "#d8d8d8";
-        document.getElementById("submit-btn").style.color = "#000000";
+        document.getElementById("submit-btn").style.backgroundColor = "#E63946";
+        document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
+        document.getElementById("submit-btn").style.color = "#ffffff";
         document.getElementById("clear-btn").style.display = "none";
         document.getElementById("new-btn").style.display = "none";
 
@@ -108,14 +79,14 @@ var controller = (function(numberCtrl, UICtrl) {
             clearInterval(id);
             document.getElementById("submit-btn").textContent = "NO SOLUTION";
             document.getElementById("clear-btn").style.display = "none";
-            document.getElementById("submit-btn").style.backgroundColor = "#e74c3c";
+            document.getElementById("submit-btn").style.backgroundColor = "#E63946";
             document.getElementById("submit-btn").style.color = "#ffffff";
             document.getElementById("new-btn").style.display = "block";
 
-            document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-3").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-1").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-2").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-3").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-4").style.backgroundColor = "#457B9D";
 
             document.removeEventListener('click', ctrlSelect);
             document.getElementById("clear-btn").removeEventListener('click', clearAll);
@@ -123,7 +94,7 @@ var controller = (function(numberCtrl, UICtrl) {
         } else if(endBoolean == 2) {
             console.log("Game End - Done");
             clearInterval(id);
-            console.log("The index is: " + index);
+            // console.log("The index is: " + index);
 
             if(index == 0) {
                 var ans1 = document.getElementById("solution-1").textContent;
@@ -133,19 +104,37 @@ var controller = (function(numberCtrl, UICtrl) {
 
                 if(ans1 == findNum || ans2 == findNum || ans3 == findNum || ans4 == findNum) {
                     score++;
-                    console.log("Score is: " + score);
+                    // console.log("Score is: " + score);
                     document.getElementById("score-number").textContent = "Score: " + score;
+                    document.getElementById("submit-btn").textContent = "CORRECT";
+                    document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
+                    document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #176538";
+                    document.getElementById("submit-btn").style.color = "#ffffff";
+                    document.getElementById("new-btn").style.display = "block";
+                    document.getElementById("clear-btn").style.display = "none";
+                } else {
+                    document.getElementById("score-number").textContent = "Score: " + score;
+                    document.getElementById("submit-btn").textContent = "WRONG";
+                    document.getElementById("submit-btn").style.backgroundColor = "#E63946";
+                    document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
+                    document.getElementById("submit-btn").style.color = "#ffffff";
+                    document.getElementById("new-btn").style.display = "block";
+                    document.getElementById("clear-btn").style.display = "none";
                 }
+            } else {
+                document.getElementById("score-number").textContent = "Score: " + score;
+                document.getElementById("submit-btn").textContent = "WRONG";
+                document.getElementById("submit-btn").style.backgroundColor = "#E63946";
+                document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
+                document.getElementById("submit-btn").style.color = "#ffffff";
+                document.getElementById("new-btn").style.display = "block";
+                document.getElementById("clear-btn").style.display = "none";
             }
 
-            document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
-            document.getElementById("submit-btn").style.color = "#ffffff";
-            document.getElementById("new-btn").style.display = "block";
-
-            document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-3").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-1").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-2").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-3").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-4").style.backgroundColor = "#457B9D";
 
             document.getElementById("clear-btn").removeEventListener('click', clearAll);
             document.getElementById("submit-btn").removeEventListener('click', endRound);
@@ -157,12 +146,13 @@ var controller = (function(numberCtrl, UICtrl) {
             document.getElementById("submit-btn").textContent = "GAME OVER";
             document.getElementById("clear-btn").style.display = "none";
             document.getElementById("submit-btn").style.backgroundColor = "#2c3e50";
+            document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #242424";
             document.getElementById("submit-btn").style.color = "#ffffff";
 
-            document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-3").style.backgroundColor = "#d8d8d8";
-            document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
+            document.getElementById("solution-1").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-2").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-3").style.backgroundColor = "#457B9D";
+            document.getElementById("solution-4").style.backgroundColor = "#457B9D";
 
             document.removeEventListener('click', ctrlSelect);
             document.getElementById("clear-btn").removeEventListener('click', clearAll);
@@ -186,11 +176,15 @@ var controller = (function(numberCtrl, UICtrl) {
             case 0:
                 if(targetElement.id.includes("solution")) {
                     document.getElementById("clear-btn").style.display = "flex";
+                    document.getElementById("clear-btn").style.boxShadow = "0px 8px 0px 0px #1D3557";
                     document.getElementById("submit-btn").textContent = "DONE";
+                    document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
+                    document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #176538";
+                    document.getElementById("submit-btn").style.color = "#ffffff";
                     firstNum = parseInt(targetElement.textContent);
                     previousNum = targetElement;
                     previousNumId = targetElement.id;
-                    targetElement.style.backgroundColor = "#727272";
+                    targetElement.style.backgroundColor = "#274A60";
                     console.log(firstNum + " is selected.")
                     pos++;
                     endBoolean = 2;
@@ -203,24 +197,24 @@ var controller = (function(numberCtrl, UICtrl) {
                         firstNum = "";
                         previousNum = "";
                         previousNumId = "";
-                        targetElement.style.backgroundColor = "#d8d8d8";
+                        targetElement.style.backgroundColor = "#457B9D";
                         console.log("Number deselected");
                         pos--;
                     } else {
                         firstNum = parseInt(targetElement.textContent);
                         if(previousNum !== "") {
-                            previousNum.style.backgroundColor = "#d8d8d8";
+                            previousNum.style.backgroundColor = "#457B9D";
                         }
                         previousNum = targetElement;
                         previousNumId = targetElement.id;
-                        targetElement.style.backgroundColor = "#727272";
+                        targetElement.style.backgroundColor = "#274A60";
                         console.log(firstNum + " is selected.")
                     }
 
                 } if(targetElement.id.includes("operation")) {
                     operationSelect = targetElement.textContent;
                     previousOp = targetElement;
-                    targetElement.style.backgroundColor = "#727272";
+                    targetElement.style.backgroundColor = "#79B5B7";
                     console.log(operationSelect + " is selected.")
                     pos++;
                 }
@@ -237,22 +231,22 @@ var controller = (function(numberCtrl, UICtrl) {
                         document.getElementById(targetElement.id).textContent = "";
                     }
                     document.getElementById(previousNumId).textContent = "";
-                    previousNum.style.backgroundColor = "#d8d8d8";
-                    previousOp.style.backgroundColor = "#d8d8d8";
+                    previousNum.style.backgroundColor = "#457B9D";
+                    previousOp.style.backgroundColor = "#A8DADC";
                     pos = 0;
                 } if(targetElement.id.includes("operation")) {
                     if(previousOp == targetElement) {
                         previousOp = "";
-                        targetElement.style.backgroundColor = "#d8d8d8";
+                        targetElement.style.backgroundColor = "#A8DADC";
                         console.log("Operator deselected");
                         pos--;  
                     } else {
                         operationSelect = targetElement.textContent;
                         if(previousOp !== "") {
-                            previousOp.style.backgroundColor = "#d8d8d8";
+                            previousOp.style.backgroundColor = "#A8DADC";
                         }
                         previousOp = targetElement;
-                        targetElement.style.backgroundColor = "#727272";
+                        targetElement.style.backgroundColor = "#79B5B7";
                         console.log(operationSelect + " is selected.")
                     }
                 }
@@ -270,15 +264,15 @@ var controller = (function(numberCtrl, UICtrl) {
         endBoolean = 1;
         index = 3;
 
-        document.getElementById("solution-1").style.backgroundColor = "#d8d8d8";
-        document.getElementById("solution-2").style.backgroundColor = "#d8d8d8";
-        document.getElementById("solution-3").style.backgroundColor = "#d8d8d8";
-        document.getElementById("solution-4").style.backgroundColor = "#d8d8d8";
+        document.getElementById("solution-1").style.backgroundColor = "#457B9D";
+        document.getElementById("solution-2").style.backgroundColor = "#457B9D";
+        document.getElementById("solution-3").style.backgroundColor = "#457B9D";
+        document.getElementById("solution-4").style.backgroundColor = "#457B9D";
 
-        document.getElementById("operation-1").style.backgroundColor = "#d8d8d8";
-        document.getElementById("operation-2").style.backgroundColor = "#d8d8d8";
-        document.getElementById("operation-3").style.backgroundColor = "#d8d8d8";
-        document.getElementById("operation-4").style.backgroundColor = "#d8d8d8";
+        document.getElementById("operation-1").style.backgroundColor = "#A8DADC";
+        document.getElementById("operation-2").style.backgroundColor = "#A8DADC";
+        document.getElementById("operation-3").style.backgroundColor = "#A8DADC";
+        document.getElementById("operation-4").style.backgroundColor = "#A8DADC";
 
         document.getElementById("solution-1").textContent = solutionNum1;
         document.getElementById("solution-2").textContent = solutionNum2;
@@ -287,6 +281,8 @@ var controller = (function(numberCtrl, UICtrl) {
 
         document.getElementById("clear-btn").style.display = "none";
         document.getElementById("submit-btn").textContent = "NO SOLUTION";
+        document.getElementById("submit-btn").style.backgroundColor = "#E63946";
+        document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
 
         console.log("Clear all");
     }
@@ -317,6 +313,6 @@ var controller = (function(numberCtrl, UICtrl) {
         
     }
 
-})(numberController, UIController);
+})();
 
 controller.init();
