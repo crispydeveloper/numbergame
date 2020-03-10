@@ -30,6 +30,12 @@ var setupGameElements = function() {
 
     document.getElementById("target-number").textContent = findNum;
 
+    document.getElementById("submit-btn").textContent = "DONE";
+    document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
+    document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #176538";
+    document.getElementById("submit-btn").style.color = "#ffffff";
+    document.getElementById("clear-btn").style.display = "flex";
+
     // document.getElementById("submit-btn").textContent = "NO SOLUTION";
     // document.getElementById("submit-btn").style.backgroundColor = "#E63946";
     // document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
@@ -44,20 +50,25 @@ var createQuestion = function() {
     findNum = Math.floor((Math.random() * 10) + 1);
 
     solutionNum1 = Math.floor((Math.random() * 10) + 1);
+    console.log("Num1 generated.");
+
     solutionNum2 = Math.floor((Math.random() * 10) + 1);
+    console.log("Num2 generated.");
 
     var firstMath = calculation(solutionNum1, solutionNum2, findNum, 0);
-    // console.log(firstMath);
+    console.log("Random equation for Num1 & Num2 success = " + firstMath);
     
     solutionNum3 = Math.floor((Math.random() * 10) + 1);
-    console.log(solutionNum3);
+    console.log("Num3 generated.");
 
     var secondMath = calculation(firstMath, solutionNum3, findNum, 0);
-    // console.log(secondMath);
+    console.log("Random equation for (Results of Num1 & Num2) and Num3 success = " + secondMath);
 
     solutionNum4 = Math.floor((Math.random() * 10) + 1);
+    console.log("Num4 generated.");
 
     var lastMath = calculation(secondMath, solutionNum4, findNum, 1);
+    console.log("Random equation for (Results of Num1 & Num2 & Num3) and Num4 success = " + lastMath);
 
     var  numberArray = [1,2,3,4,5,6,7,8,9,10];
 
@@ -132,24 +143,7 @@ var endRound = function() {
     if(endBoolean == 0) {
         setupEventListeners();
         setupGameElements();
-        endBoolean = 1;
-    } else if(endBoolean == 1) {
-        console.log("Game End - No Solution");
-        clearInterval(id);
-        document.getElementById("submit-btn").textContent = "NO SOLUTION";
-        document.getElementById("clear-btn").style.display = "none";
-        document.getElementById("submit-btn").style.backgroundColor = "#E63946";
-        document.getElementById("submit-btn").style.color = "#ffffff";
-        document.getElementById("new-btn").style.display = "block";
-
-        document.getElementById("solution-1").style.backgroundColor = "#457B9D";
-        document.getElementById("solution-2").style.backgroundColor = "#457B9D";
-        document.getElementById("solution-3").style.backgroundColor = "#457B9D";
-        document.getElementById("solution-4").style.backgroundColor = "#457B9D";
-
-        document.removeEventListener('click', ctrlSelect);
-        document.getElementById("clear-btn").removeEventListener('click', clearAll);
-        document.getElementById("submit-btn").removeEventListener('click', endRound);
+        endBoolean = 2;
     } else if(endBoolean == 2) {
         console.log("Game End - Done");
         clearInterval(id);
@@ -202,6 +196,7 @@ var endRound = function() {
     } else if(endBoolean == 3) {
         console.log("Game End - Time's Up");
         clearInterval(id);
+        document.getElementById("score-number").textContent = "Final Score: " + score;
         document.getElementById("submit-btn").textContent = "GAME OVER";
         document.getElementById("clear-btn").style.display = "none";
         document.getElementById("submit-btn").style.backgroundColor = "#2c3e50";
@@ -222,7 +217,7 @@ var endRound = function() {
 var newRound = function() {
     setupEventListeners();
     setupGameElements();
-    endBoolean = 1;
+    endBoolean = 2;
 }
 var ctrlSelect = function(event) {
     var targetElement = event.target || event.srcElement;
@@ -320,7 +315,7 @@ var clearAll = function() {
     previousOp = "";
     previousNumId = "";
     pos = 0;
-    endBoolean = 1;
+    endBoolean = 2;
     index = 3;
 
     document.getElementById("solution-1").style.backgroundColor = "#457B9D";
@@ -337,11 +332,6 @@ var clearAll = function() {
     document.getElementById("solution-2").textContent = solutionNum2;
     document.getElementById("solution-3").textContent = solutionNum3;
     document.getElementById("solution-4").textContent = solutionNum4;
-
-    document.getElementById("clear-btn").style.display = "none";
-    document.getElementById("submit-btn").textContent = "NO SOLUTION";
-    document.getElementById("submit-btn").style.backgroundColor = "#E63946";
-    document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
 
     console.log("Clear all");
 }
