@@ -234,6 +234,7 @@ var endRound = function() {
 function newGame() {
     score = 0;
     width = 100;
+    document.getElementById("new-btn").textContent = "NEXT QUESTION";
     document.getElementById("new-btn").removeEventListener('click', newGame);
     document.getElementById("score-number").textContent = "Score: " + score;
     setupEventListeners();
