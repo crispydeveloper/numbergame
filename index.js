@@ -7,6 +7,7 @@ var id;
 var score = 0;
 var index = 3;
 var width = 100;
+var solutionPosition = [];
 
 var setupEventListeners = function() {
     document.addEventListener('dblclick', e => e.preventDefault());
@@ -32,35 +33,32 @@ var setupGameElements = function() {
     for (i = 0; i < 4; i++) {
         var randomSolution = solutionNumbers[Math.floor(Math.random() * solutionNumbers.length)];
         var solutionIndex = solutionNumbers.indexOf(randomSolution);
-
+        
         solutionNumbers.splice(solutionIndex, 1);
 
         var randomBox = solutionBoxIndex[Math.floor(Math.random() * solutionBoxIndex.length)];
         var boxIndex = solutionBoxIndex.indexOf(randomBox);
-
+        
         solutionBoxIndex.splice(boxIndex, 1);
 
         document.getElementById(randomBox).textContent = randomSolution;
+
+        randomBox = randomBox.replace('solution-', '');
+        console.log(randomBox);
+        
+        solutionPosition[randomBox-1] = randomSolution;
+        console.log(solutionPosition);
     }
 
-    // document.getElementById("solution-1").textContent = solutionNum1;
-    // document.getElementById("solution-2").textContent = solutionNum2;
-    // document.getElementById("solution-3").textContent = solutionNum3;
-    // document.getElementById("solution-4").textContent = solutionNum4;
-
     document.getElementById("target-number").textContent = findNum;
+
+    console.log("All numbers successfully generated.");
 
     document.getElementById("submit-btn").textContent = "DONE";
     document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
     document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #176538";
     document.getElementById("submit-btn").style.color = "#ffffff";
     document.getElementById("clear-btn").style.display = "flex";
-
-    // document.getElementById("submit-btn").textContent = "NO SOLUTION";
-    // document.getElementById("submit-btn").style.backgroundColor = "#E63946";
-    // document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
-    // document.getElementById("submit-btn").style.color = "#ffffff";
-    // document.getElementById("clear-btn").style.display = "none";
     document.getElementById("new-btn").style.display = "none";
 
     startTimer();
@@ -76,30 +74,26 @@ var createQuestion = function() {
     console.log("Num2 generated.");
 
     var firstMath = calculation(solutionNum1, solutionNum2, findNum, 0);
-    console.log("Random equation for Num1 & Num2 success = " + firstMath);
     
     solutionNum3 = Math.floor((Math.random() * 10) + 1);
     console.log("Num3 generated.");
 
     var secondMath = calculation(firstMath, solutionNum3, findNum, 0);
-    console.log("Random equation for (Results of Num1 & Num2) and Num3 success = " + secondMath);
 
     solutionNum4 = Math.floor((Math.random() * 10) + 1);
     console.log("Num4 generated.");
 
     var lastMath = calculation(secondMath, solutionNum4, findNum, 1);
-    console.log("Random equation for (Results of Num1 & Num2 & Num3) and Num4 success = " + lastMath);
 
     var  numberArray = [1,2,3,4,5,6,7,8,9,10];
 
     while (!lastMath) {
-        console.log("Here we go again")
         var numberIndex = numberArray.indexOf(solutionNum3);
 
         numberArray.splice(numberIndex, 1);
         
         if(numberArray.length == 0) {
-            console.log("Calculating Num2");
+            console.log("Num3 unable to satisfy equation. Rolling back to Num2.");
             var num2Array = [1,2,3,4,5,6,7,8,9,10];
 
             var num2Index = num2Array.indexOf(solutionNum2);
@@ -107,10 +101,8 @@ var createQuestion = function() {
             num2Array.splice(num2Index, 1);
 
             solutionNum2 = num2Array[Math.floor((Math.random() * num2Array.length))];
-            console.log(solutionNum2);
 
             firstMath = calculation(solutionNum1, solutionNum2, findNum, 0);
-            console.log("New First Math is " + firstMath);
 
             solutionNum3 = Math.floor((Math.random() * 10) + 1);
 
@@ -119,7 +111,7 @@ var createQuestion = function() {
             solutionNum4 = Math.floor((Math.random() * 10) + 1);
 
             if(lastMath != findNum) {
-                console.log("Reboot numberArray");
+                console.log("Reboot numberArray for Num3.");
                 numberArray = [1,2,3,4,5,6,7,8,9,10];
             }
 
@@ -129,7 +121,6 @@ var createQuestion = function() {
         solutionNum3 = numberArray[Math.floor((Math.random() * numberArray.length))];
 
         secondMath = calculation(firstMath, solutionNum3, findNum, 0);
-        console.log(solutionNum3);
 
         solutionNum4 = Math.floor((Math.random() * 10) + 1);
 
@@ -232,7 +223,22 @@ var endRound = function() {
         document.removeEventListener('click', ctrlSelect);
         document.getElementById("clear-btn").removeEventListener('click', clearAll);
         document.getElementById("submit-btn").removeEventListener('click', endRound);
+        document.getElementById("new-btn").removeEventListener('click', newRound);
+
+        document.getElementById("new-btn").addEventListener('click', newGame);
+        document.getElementById("new-btn").textContent = "NEW GAME";
+        document.getElementById("new-btn").style.display = "block";
     }
+}
+
+function newGame() {
+    document.getElementById("new-btn").removeEventListener('click', newGame);
+    document.getElementById("score-number").textContent = "Score: " + score;
+    setupEventListeners();
+    setupGameElements();
+    endBoolean = 2;
+    score = 0;
+    width = 100;
 }
 
 var newRound = function() {
@@ -240,6 +246,7 @@ var newRound = function() {
     setupGameElements();
     endBoolean = 2;
 }
+
 var ctrlSelect = function(event) {
     var targetElement = event.target || event.srcElement;
 
@@ -300,7 +307,6 @@ var ctrlSelect = function(event) {
                 secondNum = parseInt(targetElement.textContent);
                 targetElement.textContent = (Math.round( calculateResult() * 10 ) / 10);
                 index--;
-                console.log(index);
                 if(targetElement.textContent == 0) {
                     index--;
                     document.getElementById(targetElement.id).textContent = "";
@@ -349,10 +355,11 @@ var clearAll = function() {
     document.getElementById("operation-3").style.backgroundColor = "#A8DADC";
     document.getElementById("operation-4").style.backgroundColor = "#A8DADC";
 
-    document.getElementById("solution-1").textContent = solutionNum1;
-    document.getElementById("solution-2").textContent = solutionNum2;
-    document.getElementById("solution-3").textContent = solutionNum3;
-    document.getElementById("solution-4").textContent = solutionNum4;
+    var i;
+
+    for(i = 0; i < solutionPosition.length; i++) {
+        document.getElementById("solution-" + (i+1)).textContent = solutionPosition[i];
+    }
 
     console.log("Clear all");
 }
@@ -413,7 +420,7 @@ if(last) {
                 b = numberArray[Math.floor(Math.random() * numberArray.length)];
 
                 if(numberArray.length == 0) {
-                    console.log("Rolling again");
+                    console.log("Num4 unable to satisfy equation. Rolling back to Num3.");
                     return 0;
                 }
             }
