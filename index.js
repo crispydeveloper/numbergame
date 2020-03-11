@@ -1,13 +1,41 @@
+// Initialize Cloud Firestore through Firebase
+firebase.initializeApp({
+    apiKey: 'AIzaSyDd9oX6brOzmnlTVtjK5yW1ISzCnpk8tkU',
+    authDomain: 'i-got-it-game.firebaseapp.com',
+    projectId: 'i-got-it-game'
+  });
+  
+var db = firebase.firestore();
+
+var highScoreRef = db.collection("highscore").doc("B2UE3aOlL8Dn7inesBCW");
+var highScoreDoc = db.collection("highscore");
+
 var pos = 0;
 var firstNum, secondNum, operationSelect, previousNum, previousOp, previousNumId;
 var solutionNum1, solutionNum2, solutionNum3, solutionNum4;
 var findNum;
 var endBoolean = 0; //0 - Game Standby, 1 - Game Begin (No Solution), 2 - Game Begin (Done), 3 - Game Begin (Timeout)
 var id;
-var score = 0;
+var currentScore = 0;
+var highScore;
 var index = 3;
 var width = 100;
 var solutionPosition = [];
+
+highScoreRef.get().then(function(doc) {
+    if (doc.exists) {
+        const { score } = doc.data();
+        console.log(score);
+        console.log("Retrieved current High Score");
+        highScore = score;
+        document.getElementById("score-number").textContent = "High Score: " + highScore;
+    } else {
+        document.getElementById("score-number").textContent = "Unable to load High Score";
+        console.log("No such document!");
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+});
 
 function setupEventListeners() {
     document.addEventListener('dblclick', e => e.preventDefault());
@@ -22,6 +50,8 @@ function setupGameElements() {
     pos = 0;
 
     document.addEventListener('click', ctrlSelect);
+
+    document.getElementById("score-number").textContent = "Score: " + currentScore;
 
     createQuestion();
 
@@ -135,7 +165,7 @@ function endRound() {
             var ans4 = document.getElementById("solution-4").textContent;
 
             if(ans1 == findNum || ans2 == findNum || ans3 == findNum || ans4 == findNum) {
-                score++;
+                currentScore++;
                 width += 20;
 
                 if(width > 100) {
@@ -144,7 +174,7 @@ function endRound() {
 
                 document.getElementById("progress-bar").style.width = width + "%";
                 // console.log("Score is: " + score);
-                document.getElementById("score-number").textContent = "Score: " + score;
+                document.getElementById("score-number").textContent = "Score: " + currentScore;
                 document.getElementById("submit-btn").textContent = "CORRECT";
                 document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
                 document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #176538";
@@ -152,7 +182,7 @@ function endRound() {
                 document.getElementById("new-btn").style.display = "block";
                 document.getElementById("clear-btn").style.display = "none";
             } else {
-                document.getElementById("score-number").textContent = "Score: " + score;
+                document.getElementById("score-number").textContent = "Score: " + currentScore;
                 document.getElementById("submit-btn").textContent = "WRONG";
                 document.getElementById("submit-btn").style.backgroundColor = "#E63946";
                 document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
@@ -161,7 +191,7 @@ function endRound() {
                 document.getElementById("clear-btn").style.display = "none";
             }
         } else {
-            document.getElementById("score-number").textContent = "Score: " + score;
+            document.getElementById("score-number").textContent = "Score: " + currentScore;
             document.getElementById("submit-btn").textContent = "WRONG";
             document.getElementById("submit-btn").style.backgroundColor = "#E63946";
             document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
@@ -183,7 +213,25 @@ function endRound() {
         console.log("Game End - Time's Up");
         clearInterval(id);
 
-        document.getElementById("score-number").textContent = "Final Score: " + score;
+        if(currentScore > highScore) {
+            document.getElementById("score-number").textContent = "New High Score: " + currentScore;
+            highScoreDoc.doc("B2UE3aOlL8Dn7inesBCW").set({
+                score: currentScore });
+
+            highScoreRef.get().then(function(doc) {
+                if (doc.exists) {
+                    const { score } = doc.data();
+                    console.log("Retrieved new High Score: " + score);
+                } else {
+                    console.log("Unable to retrieve new High Score!");
+                }
+            }).catch(function(error) {
+                console.log("Error getting document:", error);
+            });
+        } else {
+            document.getElementById("score-number").textContent = "Final Score: " + currentScore;
+        }
+
         document.getElementById("submit-btn").textContent = "GAME OVER";
         document.getElementById("clear-btn").style.display = "none";
         document.getElementById("submit-btn").style.backgroundColor = "#2c3e50";
@@ -207,11 +255,11 @@ function endRound() {
 }
 
 function newGame() {
-    score = 0;
+    currentScore = 0;
     width = 100;
     document.getElementById("new-btn").textContent = "NEXT QUESTION";
     document.getElementById("new-btn").removeEventListener('click', newGame);
-    document.getElementById("score-number").textContent = "Score: " + score;
+    document.getElementById("score-number").textContent = "Score: " + currentScore;
     setupEventListeners();
     setupGameElements();
     endBoolean = 2;
