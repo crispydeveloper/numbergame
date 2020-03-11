@@ -9,14 +9,14 @@ var index = 3;
 var width = 100;
 var solutionPosition = [];
 
-var setupEventListeners = function() {
+function setupEventListeners() {
     document.addEventListener('dblclick', e => e.preventDefault());
     document.getElementById("clear-btn").addEventListener('click', clearAll);
     document.getElementById("submit-btn").addEventListener('click', endRound)
     document.getElementById("new-btn").addEventListener('click', newRound);
-};
+}
 
-var setupGameElements = function() {
+function setupGameElements() {
     endBoolean = 0;
     index = 3;
     pos = 0;
@@ -44,15 +44,13 @@ var setupGameElements = function() {
         document.getElementById(randomBox).textContent = randomSolution;
 
         randomBox = randomBox.replace('solution-', '');
-        console.log(randomBox);
+        // console.log(randomBox);
 
         solutionPosition[randomBox-1] = randomSolution;
-        console.log(solutionPosition);
+        // console.log(solutionPosition);
     }
 
     document.getElementById("target-number").textContent = findNum;
-
-    console.log("All numbers successfully generated.");
 
     document.getElementById("submit-btn").textContent = "DONE";
     document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
@@ -65,66 +63,17 @@ var setupGameElements = function() {
 }
 
 var createQuestion = function() {
-    findNum = Math.floor((Math.random() * 10) + 1);
-
     solutionNum1 = Math.floor((Math.random() * 10) + 1);
-    console.log("Num1 generated.");
-
     solutionNum2 = Math.floor((Math.random() * 10) + 1);
-    console.log("Num2 generated.");
-
-    var firstMath = calculation(solutionNum1, solutionNum2, findNum, 0);
-    
     solutionNum3 = Math.floor((Math.random() * 10) + 1);
-    console.log("Num3 generated.");
-
-    var secondMath = calculation(firstMath, solutionNum3, findNum, 0);
-
     solutionNum4 = Math.floor((Math.random() * 10) + 1);
-    console.log("Num4 generated.");
 
-    var lastMath = calculation(secondMath, solutionNum4, findNum, 1);
-
-    var  numberArray = [1,2,3,4,5,6,7,8,9,10];
-
-    while (!lastMath) {
-        var numberIndex = numberArray.indexOf(solutionNum3);
-
-        numberArray.splice(numberIndex, 1);
-        
-        if(numberArray.length == 0) {
-            console.log("Num3 unable to satisfy equation. Rolling back to Num2.");
-            var num2Array = [1,2,3,4,5,6,7,8,9,10];
-
-            var num2Index = num2Array.indexOf(solutionNum2);
-
-            num2Array.splice(num2Index, 1);
-
-            solutionNum2 = num2Array[Math.floor((Math.random() * num2Array.length))];
-
-            firstMath = calculation(solutionNum1, solutionNum2, findNum, 0);
-
-            solutionNum3 = Math.floor((Math.random() * 10) + 1);
-
-            secondMath = calculation(firstMath, solutionNum3, findNum, 0);
-            
-            solutionNum4 = Math.floor((Math.random() * 10) + 1);
-
-            if(lastMath != findNum) {
-                console.log("Reboot numberArray for Num3.");
-                numberArray = [1,2,3,4,5,6,7,8,9,10];
-            }
-
-            lastMath = calculation(secondMath, solutionNum4, findNum, 1);
-        }
-
-        solutionNum3 = numberArray[Math.floor((Math.random() * numberArray.length))];
-
-        secondMath = calculation(firstMath, solutionNum3, findNum, 0);
-
-        solutionNum4 = Math.floor((Math.random() * 10) + 1);
-
-        lastMath = calculation(secondMath, solutionNum4, findNum, 1);
+    while(findNum == 0 || findNum < 0 || findNum % 1 != 0 || findNum > 10) {
+        firstMath = calculation(solutionNum1, solutionNum2);
+    
+        secondMath = calculation(firstMath, solutionNum3);
+    
+        findNum = calculation(secondMath, solutionNum4);
     }
 }
 
@@ -387,55 +336,25 @@ function init() {
     console.log('Game has started.');
 }
 
-function calculation(a, b, finalResult, last) {
-var opArray = ['+', '-', '*', '/'];
-var numberArray = [1,2,3,4,5,6,7,8,9,10];
+function calculation(a, b) {
+    var opArray = ['+', '-', '*', '/'];
 
-var result = 0;
+    var result = 0;
 
-var math_it_up = {
-    '+' : function(x,y) {return x + y},
-    '-' : function(x,y) {return x - y},
-    '*' : function(x,y) {return x * y},
-    '/' : function(x,y) {return x / y}
-};
+    var math_it_up = {
+        '+' : function(x,y) {return x + y},
+        '-' : function(x,y) {return x - y},
+        '*' : function(x,y) {return x * y},
+        '/' : function(x,y) {return x / y}
+    };
 
-if(last) {
-    while(result != finalResult) {
-        var randomOp = opArray[Math.floor(Math.random() * opArray.length)];
-
-        result = math_it_up[randomOp](a, b);
-
-        if(result != finalResult) {
-            var index = opArray.indexOf(randomOp);
-
-            opArray.splice(index, 1)
-
-            if(opArray.length == 0) {
-                opArray = ['+', '-', '*', '/'];
-
-                var numberIndex = numberArray.indexOf(b);
-
-                numberArray.splice(numberIndex, 1);
-
-                b = numberArray[Math.floor(Math.random() * numberArray.length)];
-
-                if(numberArray.length == 0) {
-                    console.log("Num4 unable to satisfy equation. Rolling back to Num3.");
-                    return 0;
-                }
-            }
-        }
-    }
-} else {
     while(result == 0 || result < 0 || result % 1 != 0) {
         var randomOp = opArray[Math.floor(Math.random() * 4)];
 
         result = math_it_up[randomOp](a, b);
     }
-}
 
-return result;
+    return result;
 }
 
 init();
