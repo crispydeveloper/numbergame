@@ -45,7 +45,7 @@ var setupGameElements = function() {
 
         randomBox = randomBox.replace('solution-', '');
         console.log(randomBox);
-        
+
         solutionPosition[randomBox-1] = randomSolution;
         console.log(solutionPosition);
     }
@@ -232,13 +232,13 @@ var endRound = function() {
 }
 
 function newGame() {
+    score = 0;
+    width = 100;
     document.getElementById("new-btn").removeEventListener('click', newGame);
     document.getElementById("score-number").textContent = "Score: " + score;
     setupEventListeners();
     setupGameElements();
     endBoolean = 2;
-    score = 0;
-    width = 100;
 }
 
 var newRound = function() {
