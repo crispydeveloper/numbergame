@@ -62,7 +62,8 @@ function setupGameElements() {
     startTimer();
 }
 
-var createQuestion = function() {
+function createQuestion() {
+    findNum = 0;
     solutionNum1 = Math.floor((Math.random() * 10) + 1);
     solutionNum2 = Math.floor((Math.random() * 10) + 1);
     solutionNum3 = Math.floor((Math.random() * 10) + 1);
@@ -77,7 +78,26 @@ var createQuestion = function() {
     }
 }
 
-var startTimer = function() {
+function calculation(a, b) {
+    var opArray = ['+', '-', '*', '/'];
+    var result = 0;
+    var math_it_up = {
+        '+' : function(x,y) {return x + y},
+        '-' : function(x,y) {return x - y},
+        '*' : function(x,y) {return x * y},
+        '/' : function(x,y) {return x / y}
+    };
+
+    while(result == 0 || result < 0 || result % 1 != 0) {
+        var randomOp = opArray[Math.floor(Math.random() * 4)];
+
+        result = math_it_up[randomOp](a, b);
+    }
+
+    return result;
+}
+
+function startTimer() {
     var i = 0;
 
     if (i == 0) {
@@ -98,7 +118,7 @@ var startTimer = function() {
     }
 }
 
-var endRound = function() {
+function endRound() {
     if(endBoolean == 0) {
         setupEventListeners();
         setupGameElements();
@@ -117,6 +137,11 @@ var endRound = function() {
             if(ans1 == findNum || ans2 == findNum || ans3 == findNum || ans4 == findNum) {
                 score++;
                 width += 20;
+
+                if(width > 100) {
+                    width = 100;
+                }
+
                 document.getElementById("progress-bar").style.width = width + "%";
                 // console.log("Score is: " + score);
                 document.getElementById("score-number").textContent = "Score: " + score;
@@ -157,6 +182,7 @@ var endRound = function() {
     } else if(endBoolean == 3) {
         console.log("Game End - Time's Up");
         clearInterval(id);
+
         document.getElementById("score-number").textContent = "Final Score: " + score;
         document.getElementById("submit-btn").textContent = "GAME OVER";
         document.getElementById("clear-btn").style.display = "none";
@@ -191,13 +217,13 @@ function newGame() {
     endBoolean = 2;
 }
 
-var newRound = function() {
+function newRound() {
     setupEventListeners();
     setupGameElements();
     endBoolean = 2;
 }
 
-var ctrlSelect = function(event) {
+function ctrlSelect(event) {
     var targetElement = event.target || event.srcElement;
 
     if(targetElement.textContent == "") {
@@ -282,9 +308,9 @@ var ctrlSelect = function(event) {
                 }
             }
     }
-};
+}
 
-var clearAll = function() {
+function clearAll() {
     firstNum = "";
     secondNum = "";
     operationSelect = "";
@@ -314,7 +340,7 @@ var clearAll = function() {
     console.log("Clear all");
 }
 
-var calculateResult = function() {
+function calculateResult() {
     switch(operationSelect) {
         case "+":
             return firstNum + secondNum;
@@ -334,27 +360,6 @@ function init() {
     setupEventListeners();
     document.getElementById("clear-btn").style.display = "none";
     console.log('Game has started.');
-}
-
-function calculation(a, b) {
-    var opArray = ['+', '-', '*', '/'];
-
-    var result = 0;
-
-    var math_it_up = {
-        '+' : function(x,y) {return x + y},
-        '-' : function(x,y) {return x - y},
-        '*' : function(x,y) {return x * y},
-        '/' : function(x,y) {return x / y}
-    };
-
-    while(result == 0 || result < 0 || result % 1 != 0) {
-        var randomOp = opArray[Math.floor(Math.random() * 4)];
-
-        result = math_it_up[randomOp](a, b);
-    }
-
-    return result;
 }
 
 init();
