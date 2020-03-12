@@ -30,7 +30,7 @@ highScoreRef.get().then(function(doc) {
         console.log(score);
         console.log("Retrieved current High Score");
         highScore = score;
-        document.getElementById("score-number").textContent = "High Score: " + highScore;
+        document.getElementById("score-number").textContent = "Global High Score: " + highScore;
     } else {
         document.getElementById("score-number").textContent = "Unable to load High Score";
         console.log("No such document!");
@@ -270,7 +270,7 @@ function gameOver() {
     currentScore = trueScore;
 
     if(currentScore > highScore) {
-        document.getElementById("score-number").textContent = "New High Score: " + currentScore;
+        document.getElementById("score-number").textContent = "New Global High Score: " + currentScore;
         highScoreDoc.doc("B2UE3aOlL8Dn7inesBCW").set({
             score: currentScore });
 
