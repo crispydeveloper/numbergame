@@ -18,6 +18,7 @@ var endBoolean = 0; //0 - Game Standby, 1 - Game Begin (No Solution), 2 - Game B
 var id;
 var currentScore = 0;
 var highScore;
+var gameRound = 0;
 var index = 3;
 var width = 100;
 var solutionPosition = [];
@@ -93,6 +94,8 @@ function setupGameElements() {
 }
 
 function createQuestion() {
+    var loopCount = 0;
+    gameRound++;
     findNum = 0;
     solutionNum1 = Math.floor((Math.random() * 10) + 1);
     solutionNum2 = Math.floor((Math.random() * 10) + 1);
@@ -101,11 +104,36 @@ function createQuestion() {
 
     while(findNum == 0 || findNum < 0 || findNum % 1 != 0 || findNum > 10) {
         firstMath = calculation(solutionNum1, solutionNum2);
+        console.log(solutionNum1);
+        console.log(solutionNum2);
+        console.log("firstMath " + firstMath);
     
         secondMath = calculation(firstMath, solutionNum3);
+        console.log(firstMath);
+        console.log(solutionNum3);
+        console.log("secondMath " + secondMath);
     
         findNum = calculation(secondMath, solutionNum4);
+        console.log(secondMath);
+        console.log(solutionNum4);
+        console.log("findNum " + findNum);
+
+        loopCount++;
+
+        if(loopCount > 20) {
+            console.log("Rerolling numbers")
+            solutionNum1 = Math.floor((Math.random() * 10) + 1);
+            solutionNum2 = Math.floor((Math.random() * 10) + 1);
+            solutionNum3 = Math.floor((Math.random() * 10) + 1);
+            solutionNum4 = Math.floor((Math.random() * 10) + 1);
+            loopCount = 0;
+        }
+
+        console.log("Generating question.");
     }
+
+    console.log("Question generated.");
+    console.log("Begin Round: " + gameRound);
 }
 
 function calculation(a, b) {
@@ -122,7 +150,9 @@ function calculation(a, b) {
         var randomOp = opArray[Math.floor(Math.random() * 4)];
 
         result = math_it_up[randomOp](a, b);
+        console.log("Calculating");
     }
+    console.log("Done calculating")
 
     return result;
 }
@@ -251,6 +281,8 @@ function endRound() {
         document.getElementById("new-btn").addEventListener('click', newGame);
         document.getElementById("new-btn").textContent = "NEW GAME";
         document.getElementById("new-btn").style.display = "block";
+
+        gameRound = 0;
     }
 }
 
