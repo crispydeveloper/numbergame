@@ -17,6 +17,7 @@ var findNum;
 var endBoolean = 0; //0 - Game Standby, 1 - Game Begin (No Solution), 2 - Game Begin (Done), 3 - Game Begin (Timeout)
 var id;
 var currentScore = 0;
+var trueScore = 0;
 var highScore;
 var gameRound = 0;
 var index = 3;
@@ -119,6 +120,7 @@ function createQuestion() {
         console.log("findNum " + findNum);
 
         loopCount++;
+        console.log("Loop Count: " + loopCount);
 
         if(loopCount > 20) {
             console.log("Rerolling numbers")
@@ -196,6 +198,8 @@ function endRound() {
 
             if(ans1 == findNum || ans2 == findNum || ans3 == findNum || ans4 == findNum) {
                 currentScore++;
+                trueScore++;
+                currentScore = trueScore;
                 width += 20;
 
                 if(width > 100) {
@@ -212,6 +216,30 @@ function endRound() {
                 document.getElementById("new-btn").style.display = "block";
                 document.getElementById("clear-btn").style.display = "none";
             } else {
+                width -= 15;
+                if(width <= 0) {
+                    width = 0;
+                    document.getElementById("progress-bar").style.width = width + "%";
+                    gameOver();
+                } else {
+                    document.getElementById("progress-bar").style.width = width + "%";
+                    document.getElementById("score-number").textContent = "Score: " + currentScore;
+                    document.getElementById("submit-btn").textContent = "WRONG";
+                    document.getElementById("submit-btn").style.backgroundColor = "#E63946";
+                    document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
+                    document.getElementById("submit-btn").style.color = "#ffffff";
+                    document.getElementById("new-btn").style.display = "block";
+                    document.getElementById("clear-btn").style.display = "none";
+                }
+            }
+        } else {
+            width -= 15;
+            if(width <= 0) {
+                width = 0;
+                document.getElementById("progress-bar").style.width = width + "%";
+                gameOver();
+            } else {
+                document.getElementById("progress-bar").style.width = width + "%";
                 document.getElementById("score-number").textContent = "Score: " + currentScore;
                 document.getElementById("submit-btn").textContent = "WRONG";
                 document.getElementById("submit-btn").style.backgroundColor = "#E63946";
@@ -220,14 +248,6 @@ function endRound() {
                 document.getElementById("new-btn").style.display = "block";
                 document.getElementById("clear-btn").style.display = "none";
             }
-        } else {
-            document.getElementById("score-number").textContent = "Score: " + currentScore;
-            document.getElementById("submit-btn").textContent = "WRONG";
-            document.getElementById("submit-btn").style.backgroundColor = "#E63946";
-            document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
-            document.getElementById("submit-btn").style.color = "#ffffff";
-            document.getElementById("new-btn").style.display = "block";
-            document.getElementById("clear-btn").style.display = "none";
         }
 
         document.getElementById("solution-1").style.backgroundColor = "#457B9D";
@@ -240,50 +260,55 @@ function endRound() {
 
         document.removeEventListener('click', ctrlSelect);
     } else if(endBoolean == 3) {
-        console.log("Game End - Time's Up");
-        clearInterval(id);
-
-        if(currentScore > highScore) {
-            document.getElementById("score-number").textContent = "New High Score: " + currentScore;
-            highScoreDoc.doc("B2UE3aOlL8Dn7inesBCW").set({
-                score: currentScore });
-
-            highScoreRef.get().then(function(doc) {
-                if (doc.exists) {
-                    const { score } = doc.data();
-                    console.log("Retrieved new High Score: " + score);
-                } else {
-                    console.log("Unable to retrieve new High Score!");
-                }
-            }).catch(function(error) {
-                console.log("Error getting document:", error);
-            });
-        } else {
-            document.getElementById("score-number").textContent = "Final Score: " + currentScore;
-        }
-
-        document.getElementById("submit-btn").textContent = "GAME OVER";
-        document.getElementById("clear-btn").style.display = "none";
-        document.getElementById("submit-btn").style.backgroundColor = "#2c3e50";
-        document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #242424";
-        document.getElementById("submit-btn").style.color = "#ffffff";
-
-        document.getElementById("solution-1").style.backgroundColor = "#457B9D";
-        document.getElementById("solution-2").style.backgroundColor = "#457B9D";
-        document.getElementById("solution-3").style.backgroundColor = "#457B9D";
-        document.getElementById("solution-4").style.backgroundColor = "#457B9D";
-
-        document.removeEventListener('click', ctrlSelect);
-        document.getElementById("clear-btn").removeEventListener('click', clearAll);
-        document.getElementById("submit-btn").removeEventListener('click', endRound);
-        document.getElementById("new-btn").removeEventListener('click', newRound);
-
-        document.getElementById("new-btn").addEventListener('click', newGame);
-        document.getElementById("new-btn").textContent = "NEW GAME";
-        document.getElementById("new-btn").style.display = "block";
-
-        gameRound = 0;
+        gameOver();
     }
+}
+
+function gameOver() {
+    console.log("Game End - Time's Up");
+    clearInterval(id);
+    currentScore = trueScore;
+
+    if(currentScore > highScore) {
+        document.getElementById("score-number").textContent = "New High Score: " + currentScore;
+        highScoreDoc.doc("B2UE3aOlL8Dn7inesBCW").set({
+            score: currentScore });
+
+        highScoreRef.get().then(function(doc) {
+            if (doc.exists) {
+                const { score } = doc.data();
+                console.log("Retrieved new High Score: " + score);
+            } else {
+                console.log("Unable to retrieve new High Score!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+    } else {
+        document.getElementById("score-number").textContent = "Final Score: " + currentScore;
+    }
+
+    document.getElementById("submit-btn").textContent = "GAME OVER";
+    document.getElementById("clear-btn").style.display = "none";
+    document.getElementById("submit-btn").style.backgroundColor = "#2c3e50";
+    document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #242424";
+    document.getElementById("submit-btn").style.color = "#ffffff";
+
+    document.getElementById("solution-1").style.backgroundColor = "#457B9D";
+    document.getElementById("solution-2").style.backgroundColor = "#457B9D";
+    document.getElementById("solution-3").style.backgroundColor = "#457B9D";
+    document.getElementById("solution-4").style.backgroundColor = "#457B9D";
+
+    document.removeEventListener('click', ctrlSelect);
+    document.getElementById("clear-btn").removeEventListener('click', clearAll);
+    document.getElementById("submit-btn").removeEventListener('click', endRound);
+    document.getElementById("new-btn").removeEventListener('click', newRound);
+
+    document.getElementById("new-btn").addEventListener('click', newGame);
+    document.getElementById("new-btn").textContent = "NEW GAME";
+    document.getElementById("new-btn").style.display = "block";
+
+    gameRound = 0;
 }
 
 function newGame() {
