@@ -20,6 +20,7 @@ var currentScore = 0;
 var trueScore = 0;
 var highScore;
 var gameRound = 0;
+var difficulty = 0;
 var index;
 var width = 100;
 var solutionPosition = [];
@@ -98,7 +99,7 @@ function createQuestion() {
     gameRound++;
     findNum = 0;
 
-    if(gameRound > 0 && gameRound <= 5) {
+    if(difficulty >= 0 && difficulty < 5) {
         index = 1;
         solutionNum1 = Math.floor((Math.random() * 10) + 1);
         solutionNum2 = Math.floor((Math.random() * 10) + 1);
@@ -124,7 +125,7 @@ function createQuestion() {
     
             console.log("Generating question.");
         }
-    } else if(gameRound > 5 && gameRound <= 10) {
+    } else if(difficulty >= 5 && difficulty < 10) {
         index = 3;
         solutionNum1 = Math.floor((Math.random() * 10) + 1);
         solutionNum2 = Math.floor((Math.random() * 10) + 1);
@@ -161,7 +162,7 @@ function createQuestion() {
     
             console.log("Generating question.");
         }
-    } else if(gameRound > 10) {
+    } else if(difficulty >= 10) {
         index = 3;
         solutionNum1 = Math.floor((Math.random() * 15) + 1);
         solutionNum2 = Math.floor((Math.random() * 15) + 1);
@@ -202,6 +203,7 @@ function createQuestion() {
 
     console.log("Question generated.");
     console.log("Begin Round: " + gameRound);
+    console.log("Round difficulty: " + difficulty);
 }
 
 function calculation(a, b) {
@@ -265,6 +267,14 @@ function endRound() {
             if(ans1 == findNum || ans2 == findNum || ans3 == findNum || ans4 == findNum) {
                 currentScore++;
                 trueScore++;
+                difficulty++;
+                
+                if(difficulty <= 10) {
+                    console.log("Difficulty increased");
+                } else {
+                    console.log("Difficulty max");
+                }
+
                 currentScore = trueScore;
                 width += 20;
 
@@ -375,6 +385,7 @@ function gameOver() {
     document.getElementById("new-btn").style.display = "block";
 
     gameRound = 0;
+    difficulty = 0;
 }
 
 function newGame() {
