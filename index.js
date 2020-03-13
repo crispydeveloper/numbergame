@@ -30,7 +30,7 @@ var solutionPosition = [];
 highScoreRef.get().then(function(doc) {
     if (doc.exists) {
         const { score } = doc.data();
-        console.log(score);
+        // console.log(score);
         highScore = score;
         document.getElementById("score-number").textContent = "Global High Score: " + highScore;
     } else {
@@ -38,7 +38,7 @@ highScoreRef.get().then(function(doc) {
         console.log("No such document!");
     }
 
-    console.log("Retrieved current Global High Score");
+    console.log("Retrieved current Global High Score: " + highScore);
 
 }).catch(function(error) {
     console.log("Error getting document:", error);
@@ -110,24 +110,24 @@ function createQuestion() {
 
         while(findNum == 0 || findNum < 0 || findNum % 1 != 0 || findNum > 10) {
             firstMath = calculation(solutionNum1, solutionNum2);
-            console.log(solutionNum1);
-            console.log(solutionNum2);
-            console.log("firstMath " + firstMath);
+            // console.log(solutionNum1);
+            // console.log(solutionNum2);
+            // console.log("firstMath " + firstMath);
 
             findNum = firstMath;
     
             loopCount++;
-            console.log("Loop Count: " + loopCount);
+            // console.log("Loop Count: " + loopCount);
     
             if(loopCount > 20) {
-                console.log("Rerolling numbers")
+                // console.log("Rerolling numbers")
                 solutionNum1 = Math.floor((Math.random() * 10) + 1);
                 solutionNum2 = Math.floor((Math.random() * 10) + 1);
 
                 loopCount = 0;
             }
     
-            console.log("Generating question.");
+            // console.log("Generating question.");
         }
     } else if(difficulty >= 3 && difficulty < 10) {
         index = 3;
@@ -138,25 +138,25 @@ function createQuestion() {
     
         while(findNum == 0 || findNum < 0 || findNum % 1 != 0 || findNum > 10) {
             firstMath = calculation(solutionNum1, solutionNum2);
-            console.log(solutionNum1);
-            console.log(solutionNum2);
-            console.log("firstMath " + firstMath);
+            // console.log(solutionNum1);
+            // console.log(solutionNum2);
+            // console.log("firstMath " + firstMath);
         
             secondMath = calculation(firstMath, solutionNum3);
-            console.log(firstMath);
-            console.log(solutionNum3);
-            console.log("secondMath " + secondMath);
+            // console.log(firstMath);
+            // console.log(solutionNum3);
+            // console.log("secondMath " + secondMath);
         
             findNum = calculation(secondMath, solutionNum4);
-            console.log(secondMath);
-            console.log(solutionNum4);
-            console.log("findNum " + findNum);
+            // console.log(secondMath);
+            // console.log(solutionNum4);
+            // console.log("findNum " + findNum);
     
             loopCount++;
-            console.log("Loop Count: " + loopCount);
+            // console.log("Loop Count: " + loopCount);
     
             if(loopCount > 20) {
-                console.log("Rerolling numbers")
+                // console.log("Rerolling numbers")
                 solutionNum1 = Math.floor((Math.random() * 10) + 1);
                 solutionNum2 = Math.floor((Math.random() * 10) + 1);
                 solutionNum3 = Math.floor((Math.random() * 10) + 1);
@@ -164,7 +164,7 @@ function createQuestion() {
                 loopCount = 0;
             }
     
-            console.log("Generating question.");
+            // console.log("Generating question.");
         }
     } else if(difficulty >= 10) {
         index = 3;
@@ -367,7 +367,7 @@ function gameOver() {
             console.log("No such document!");
         }
 
-    console.log("Retrieved current Global High Score");
+    console.log("Global High Score: " + highScore);
 
     }).catch(function(error) {
         console.log("Error getting document:", error);
