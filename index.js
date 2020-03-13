@@ -31,13 +31,15 @@ highScoreRef.get().then(function(doc) {
     if (doc.exists) {
         const { score } = doc.data();
         console.log(score);
-        console.log("Retrieved current High Score");
         highScore = score;
         document.getElementById("score-number").textContent = "Global High Score: " + highScore;
     } else {
         document.getElementById("score-number").textContent = "Unable to load High Score";
         console.log("No such document!");
     }
+
+    console.log("Retrieved current Global High Score");
+
 }).catch(function(error) {
     console.log("Error getting document:", error);
 });
@@ -173,25 +175,25 @@ function createQuestion() {
     
         while(findNum == 0 || findNum < 0 || findNum % 1 != 0 || findNum > 50) {
             firstMath = calculation(solutionNum1, solutionNum2);
-            console.log(solutionNum1);
-            console.log(solutionNum2);
-            console.log("firstMath " + firstMath);
+            // console.log(solutionNum1);
+            // console.log(solutionNum2);
+            // console.log("firstMath " + firstMath);
         
             secondMath = calculation(firstMath, solutionNum3);
-            console.log(firstMath);
-            console.log(solutionNum3);
-            console.log("secondMath " + secondMath);
+            // console.log(firstMath);
+            // console.log(solutionNum3);
+            // console.log("secondMath " + secondMath);
         
             findNum = calculation(secondMath, solutionNum4);
-            console.log(secondMath);
-            console.log(solutionNum4);
-            console.log("findNum " + findNum);
+            // console.log(secondMath);
+            // console.log(solutionNum4);
+            // console.log("findNum " + findNum);
     
             loopCount++;
-            console.log("Loop Count: " + loopCount);
+            // console.log("Loop Count: " + loopCount);
     
             if(loopCount > 20) {
-                console.log("Rerolling numbers")
+                // console.log("Rerolling numbers")
                 solutionNum1 = Math.floor((Math.random() * 15) + 1);
                 solutionNum2 = Math.floor((Math.random() * 15) + 1);
                 solutionNum3 = Math.floor((Math.random() * 15) + 1);
@@ -199,14 +201,16 @@ function createQuestion() {
                 loopCount = 0;
             }
     
-            console.log("Generating question.");
+            // console.log("Generating question.");
         }
     }
 
-    console.log("Question generated.");
+    // console.log("Question generated.");
     console.log("Begin Round: " + gameRound);
     console.log("Round difficulty: " + difficulty);
-    console.log("Current Index: " + index);
+    console.log("Current Score: " + currentScore);
+    console.log("True Score: " + trueScore);
+    // console.log("Current Index: " + index);
 }
 
 function calculation(a, b) {
@@ -223,9 +227,9 @@ function calculation(a, b) {
         var randomOp = opArray[Math.floor(Math.random() * 4)];
 
         result = math_it_up[randomOp](a, b);
-        console.log("Calculating");
+        // console.log("Calculating");
     }
-    console.log("Done calculating")
+    // console.log("Done calculating")
 
     return result;
 }
@@ -273,9 +277,9 @@ function endRound() {
                 difficulty++;
                 
                 if(difficulty <= 10) {
-                    console.log("Difficulty increased");
+                    // console.log("Difficulty increased");
                 } else {
-                    console.log("Difficulty max");
+                    // console.log("Difficulty max");
                 }
 
                 currentScore = trueScore;
@@ -334,6 +338,11 @@ function endRound() {
         document.getElementById("solution-3").style.backgroundColor = "#457B9D";
         document.getElementById("solution-4").style.backgroundColor = "#457B9D";
 
+        document.getElementById("operation-1").style.backgroundColor = "#A8DADC";
+        document.getElementById("operation-2").style.backgroundColor = "#A8DADC";
+        document.getElementById("operation-3").style.backgroundColor = "#A8DADC";
+        document.getElementById("operation-4").style.backgroundColor = "#A8DADC";
+
         document.getElementById("clear-btn").removeEventListener('click', clearAll);
         document.getElementById("submit-btn").removeEventListener('click', endRound);
 
@@ -348,23 +357,26 @@ function gameOver() {
     clearInterval(id);
     currentScore = trueScore;
 
+    highScoreRef.get().then(function(doc) {
+        if (doc.exists) {
+            const { score } = doc.data();
+            console.log(score);
+            highScore = score;
+        } else {
+            document.getElementById("score-number").textContent = "Unable to load High Score";
+            console.log("No such document!");
+        }
+
+    console.log("Retrieved current Global High Score");
+
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+
     if(currentScore > highScore) {
         document.getElementById("score-number").textContent = "New Global High Score: " + currentScore;
         highScoreDoc.doc("B2UE3aOlL8Dn7inesBCW").set({
             score: currentScore });
-
-        highScoreRef.get().then(function(doc) {
-            if (doc.exists) {
-                const { score } = doc.data();
-                console.log("Retrieved new High Score: " + score);
-            } else {
-                console.log("Unable to retrieve new High Score!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
-    } else {
-        document.getElementById("score-number").textContent = "Final Score: " + currentScore;
     }
 
     document.getElementById("submit-btn").textContent = "GAME OVER";
@@ -432,7 +444,7 @@ function ctrlSelect(event) {
                 previousNum = targetElement;
                 previousNumId = targetElement.id;
                 targetElement.style.backgroundColor = "#274A60";
-                console.log(firstNum + " is selected.")
+                // console.log(firstNum + " is selected.")
                 pos++;
                 endBoolean = 2;
             }
@@ -445,7 +457,7 @@ function ctrlSelect(event) {
                     previousNum = "";
                     previousNumId = "";
                     targetElement.style.backgroundColor = "#457B9D";
-                    console.log("Number deselected");
+                    // console.log("Number deselected");
                     pos--;
                 } else {
                     firstNum = parseInt(targetElement.textContent);
@@ -455,14 +467,14 @@ function ctrlSelect(event) {
                     previousNum = targetElement;
                     previousNumId = targetElement.id;
                     targetElement.style.backgroundColor = "#274A60";
-                    console.log(firstNum + " is selected.")
+                    // console.log(firstNum + " is selected.")
                 }
 
             } else if(targetElement.id.includes("operation")) {
                 operationSelect = targetElement.textContent;
                 previousOp = targetElement;
                 targetElement.style.backgroundColor = "#79B5B7";
-                console.log(operationSelect + " is selected.")
+                // console.log(operationSelect + " is selected.")
                 pos++;
             }
             break;
@@ -480,12 +492,12 @@ function ctrlSelect(event) {
                 previousNum.style.backgroundColor = "#457B9D";
                 previousOp.style.backgroundColor = "#A8DADC";
                 pos = 0;
-                console.log("Current Index: " + index);
+                // console.log("Current Index: " + index);
             } else if(targetElement.id.includes("operation")) {
                 if(previousOp == targetElement) {
                     previousOp = "";
                     targetElement.style.backgroundColor = "#A8DADC";
-                    console.log("Operator deselected");
+                    // console.log("Operator deselected");
                     pos--;  
                 } else {
                     operationSelect = targetElement.textContent;
@@ -494,7 +506,7 @@ function ctrlSelect(event) {
                     }
                     previousOp = targetElement;
                     targetElement.style.backgroundColor = "#79B5B7";
-                    console.log(operationSelect + " is selected.")
+                    // console.log(operationSelect + " is selected.")
                 }
             }
     }
@@ -532,7 +544,7 @@ function clearAll() {
         document.getElementById("solution-" + (i+1)).textContent = solutionPosition[i];
     }
 
-    console.log("Clear all");
+    // console.log("Clear all");
 }
 
 function calculateResult() {
