@@ -390,6 +390,7 @@ function gameOver() {
 
 function newGame() {
     currentScore = 0;
+    trueScore = 0;
     gameRound = 0;
     difficulty = 0; 
     width = 100;
