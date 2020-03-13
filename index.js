@@ -21,6 +21,8 @@ var trueScore = 0;
 var highScore;
 var gameRound = 0;
 var difficulty = 0;
+var solutionNumbers;
+var solutionBoxIndex;
 var index;
 var width = 100;
 var solutionPosition = [];
@@ -57,8 +59,8 @@ function setupGameElements() {
 
     createQuestion();
 
-    var solutionNumbers = [solutionNum1, solutionNum2, solutionNum3, solutionNum4];
-    var solutionBoxIndex = ["solution-1", "solution-2", "solution-3", "solution-4"];
+    solutionNumbers = [solutionNum1, solutionNum2, solutionNum3, solutionNum4];
+    solutionBoxIndex = ["solution-1", "solution-2", "solution-3", "solution-4"];
     
     var i;
 
@@ -99,7 +101,7 @@ function createQuestion() {
     gameRound++;
     findNum = 0;
 
-    if(difficulty >= 0 && difficulty < 5) {
+    if(difficulty >= 0 && difficulty < 3) {
         index = 1;
         solutionNum1 = Math.floor((Math.random() * 10) + 1);
         solutionNum2 = Math.floor((Math.random() * 10) + 1);
@@ -125,7 +127,7 @@ function createQuestion() {
     
             console.log("Generating question.");
         }
-    } else if(difficulty >= 5 && difficulty < 10) {
+    } else if(difficulty >= 3 && difficulty < 10) {
         index = 3;
         solutionNum1 = Math.floor((Math.random() * 10) + 1);
         solutionNum2 = Math.floor((Math.random() * 10) + 1);
@@ -204,6 +206,7 @@ function createQuestion() {
     console.log("Question generated.");
     console.log("Begin Round: " + gameRound);
     console.log("Round difficulty: " + difficulty);
+    console.log("Current Index: " + index);
 }
 
 function calculation(a, b) {
@@ -233,7 +236,7 @@ function startTimer() {
     if (i == 0) {
         i = 1;
         var elem = document.getElementById("progress-bar");
-        id = setInterval(frame, 600);
+        id = setInterval(frame, 100);
         function frame() {
             if (width <= 0) {
             clearInterval(id);
@@ -383,17 +386,20 @@ function gameOver() {
     document.getElementById("new-btn").addEventListener('click', newGame);
     document.getElementById("new-btn").textContent = "NEW GAME";
     document.getElementById("new-btn").style.display = "block";
-
-    gameRound = 0;
-    difficulty = 0;
 }
 
 function newGame() {
     currentScore = 0;
+    gameRound = 0;
+    difficulty = 0; 
     width = 100;
     document.getElementById("new-btn").textContent = "NEXT QUESTION";
     document.getElementById("new-btn").removeEventListener('click', newGame);
     document.getElementById("score-number").textContent = "Score: " + currentScore;
+    solutionNum1 = "";
+    solutionNum2 = "";
+    solutionNum3 = "";
+    solutionNum4 = "";
     setupEventListeners();
     setupGameElements();
     endBoolean = 2;
@@ -451,7 +457,7 @@ function ctrlSelect(event) {
                     console.log(firstNum + " is selected.")
                 }
 
-            } if(targetElement.id.includes("operation")) {
+            } else if(targetElement.id.includes("operation")) {
                 operationSelect = targetElement.textContent;
                 previousOp = targetElement;
                 targetElement.style.backgroundColor = "#79B5B7";
@@ -473,7 +479,8 @@ function ctrlSelect(event) {
                 previousNum.style.backgroundColor = "#457B9D";
                 previousOp.style.backgroundColor = "#A8DADC";
                 pos = 0;
-            } if(targetElement.id.includes("operation")) {
+                console.log("Current Index: " + index);
+            } else if(targetElement.id.includes("operation")) {
                 if(previousOp == targetElement) {
                     previousOp = "";
                     targetElement.style.backgroundColor = "#A8DADC";
