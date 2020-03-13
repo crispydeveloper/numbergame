@@ -508,7 +508,12 @@ function clearAll() {
     previousNumId = "";
     pos = 0;
     endBoolean = 2;
-    index = 3;
+
+    if(difficulty >= 0 && difficulty < 3) {
+        index = 1;
+    } else {
+        index = 3;
+    }
 
     document.getElementById("solution-1").style.backgroundColor = "#457B9D";
     document.getElementById("solution-2").style.backgroundColor = "#457B9D";
