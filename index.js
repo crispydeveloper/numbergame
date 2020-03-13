@@ -236,7 +236,7 @@ function startTimer() {
     if (i == 0) {
         i = 1;
         var elem = document.getElementById("progress-bar");
-        id = setInterval(frame, 100);
+        id = setInterval(frame, 600);
         function frame() {
             if (width <= 0) {
             clearInterval(id);
