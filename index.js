@@ -424,6 +424,41 @@ function newRound() {
     endBoolean = 2;
 }
 
+function clearAll() {
+    firstNum = "";
+    secondNum = "";
+    operationSelect = "";
+    previousNum = "";
+    previousOp = "";
+    previousNumId = "";
+    pos = 0;
+    endBoolean = 2;
+
+    if(difficulty >= 0 && difficulty < 3) {
+        index = 1;
+    } else {
+        index = 3;
+    }
+
+    document.getElementById("solution-1").style.backgroundColor = "#457B9D";
+    document.getElementById("solution-2").style.backgroundColor = "#457B9D";
+    document.getElementById("solution-3").style.backgroundColor = "#457B9D";
+    document.getElementById("solution-4").style.backgroundColor = "#457B9D";
+
+    document.getElementById("operation-1").style.backgroundColor = "#A8DADC";
+    document.getElementById("operation-2").style.backgroundColor = "#A8DADC";
+    document.getElementById("operation-3").style.backgroundColor = "#A8DADC";
+    document.getElementById("operation-4").style.backgroundColor = "#A8DADC";
+
+    var i;
+
+    for(i = 0; i < solutionPosition.length; i++) {
+        document.getElementById("solution-" + (i+1)).textContent = solutionPosition[i];
+    }
+
+    // console.log("Clear all");
+}
+
 function ctrlSelect(event) {
     var targetElement = event.target || event.srcElement;
 
@@ -510,41 +545,6 @@ function ctrlSelect(event) {
                 }
             }
     }
-}
-
-function clearAll() {
-    firstNum = "";
-    secondNum = "";
-    operationSelect = "";
-    previousNum = "";
-    previousOp = "";
-    previousNumId = "";
-    pos = 0;
-    endBoolean = 2;
-
-    if(difficulty >= 0 && difficulty < 3) {
-        index = 1;
-    } else {
-        index = 3;
-    }
-
-    document.getElementById("solution-1").style.backgroundColor = "#457B9D";
-    document.getElementById("solution-2").style.backgroundColor = "#457B9D";
-    document.getElementById("solution-3").style.backgroundColor = "#457B9D";
-    document.getElementById("solution-4").style.backgroundColor = "#457B9D";
-
-    document.getElementById("operation-1").style.backgroundColor = "#A8DADC";
-    document.getElementById("operation-2").style.backgroundColor = "#A8DADC";
-    document.getElementById("operation-3").style.backgroundColor = "#A8DADC";
-    document.getElementById("operation-4").style.backgroundColor = "#A8DADC";
-
-    var i;
-
-    for(i = 0; i < solutionPosition.length; i++) {
-        document.getElementById("solution-" + (i+1)).textContent = solutionPosition[i];
-    }
-
-    // console.log("Clear all");
 }
 
 function calculateResult() {
