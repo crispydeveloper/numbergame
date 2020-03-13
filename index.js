@@ -440,7 +440,7 @@ function ctrlSelect(event) {
                 document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
                 document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #176538";
                 document.getElementById("submit-btn").style.color = "#ffffff";
-                firstNum = parseInt(targetElement.textContent);
+                firstNum = parseFloat(targetElement.textContent);
                 previousNum = targetElement;
                 previousNumId = targetElement.id;
                 targetElement.style.backgroundColor = "#274A60";
@@ -460,7 +460,7 @@ function ctrlSelect(event) {
                     // console.log("Number deselected");
                     pos--;
                 } else {
-                    firstNum = parseInt(targetElement.textContent);
+                    firstNum = parseFloat(targetElement.textContent);
                     if(previousNum !== "") {
                         previousNum.style.backgroundColor = "#457B9D";
                     }
@@ -481,9 +481,9 @@ function ctrlSelect(event) {
 
         case 2:
             if(targetElement.id.includes("solution") && targetElement.id != previousNumId) {
-                secondNum = parseInt(targetElement.textContent);
-                targetElement.textContent = (Math.round( calculateResult() * 10 ) / 10);
-                index--;
+                secondNum = parseFloat(targetElement.textContent);
+                targetElement.textContent = Math.round(calculateResult() * 10 ) / 10;
+                index--; 
                 if(targetElement.textContent == 0) {
                     index--;
                     document.getElementById(targetElement.id).textContent = "";
