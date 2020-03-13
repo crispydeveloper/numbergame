@@ -19,6 +19,8 @@ var id;
 var currentScore = 0;
 var trueScore = 0;
 var highScore;
+var titleTimer;
+var progressTimer;
 var gameRound = 0;
 var difficulty = 0;
 var solutionNumbers;
@@ -292,12 +294,13 @@ function endRound() {
                 document.getElementById("progress-bar").style.width = width + "%";
                 // console.log("Score is: " + score);
                 document.getElementById("score-number").textContent = "Score: " + currentScore;
-                document.getElementById("submit-btn").textContent = "CORRECT";
-                document.getElementById("submit-btn").style.backgroundColor = "#27ae60";
-                document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #176538";
-                document.getElementById("submit-btn").style.color = "#ffffff";
-                document.getElementById("new-btn").style.display = "block";
-                document.getElementById("clear-btn").style.display = "none";
+
+                document.getElementById("target-title").textContent = "CORRECT!";
+                document.getElementById("target-title").style.color = "#27ae60";
+
+                titleTimer = setTimeout(revertTitle, 1000);
+
+                newRound();
             } else {
                 width -= 15;
                 if(width <= 0) {
@@ -307,12 +310,17 @@ function endRound() {
                 } else {
                     document.getElementById("progress-bar").style.width = width + "%";
                     document.getElementById("score-number").textContent = "Score: " + currentScore;
-                    document.getElementById("submit-btn").textContent = "WRONG";
-                    document.getElementById("submit-btn").style.backgroundColor = "#E63946";
-                    document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
-                    document.getElementById("submit-btn").style.color = "#ffffff";
-                    document.getElementById("new-btn").style.display = "block";
-                    document.getElementById("clear-btn").style.display = "none";
+
+                    document.getElementById("target-title").textContent = "WRONG!";
+                    document.getElementById("target-title").style.color = "#E63946";
+
+                    document.getElementById("progress-bar").style.backgroundColor = "#A62731";
+
+                    progressTimer = setTimeout(revertBar, 200);
+
+                    titleTimer = setTimeout(revertTitle, 1000);
+
+                    newRound();
                 }
             }
         } else {
@@ -324,12 +332,17 @@ function endRound() {
             } else {
                 document.getElementById("progress-bar").style.width = width + "%";
                 document.getElementById("score-number").textContent = "Score: " + currentScore;
-                document.getElementById("submit-btn").textContent = "WRONG";
-                document.getElementById("submit-btn").style.backgroundColor = "#E63946";
-                document.getElementById("submit-btn").style.boxShadow = "0px 8px 0px 0px #9C031E";
-                document.getElementById("submit-btn").style.color = "#ffffff";
-                document.getElementById("new-btn").style.display = "block";
-                document.getElementById("clear-btn").style.display = "none";
+
+                document.getElementById("target-title").textContent = "WRONG!";
+                document.getElementById("target-title").style.color = "#E63946";
+
+                document.getElementById("progress-bar").style.backgroundColor = "#A62731";
+
+                progressTimer = setTimeout(revertBar, 200);
+
+                titleTimer = setTimeout(revertTitle, 1000);
+
+                newRound();
             }
         }
 
@@ -342,14 +355,20 @@ function endRound() {
         document.getElementById("operation-2").style.backgroundColor = "#A8DADC";
         document.getElementById("operation-3").style.backgroundColor = "#A8DADC";
         document.getElementById("operation-4").style.backgroundColor = "#A8DADC";
-
-        document.getElementById("clear-btn").removeEventListener('click', clearAll);
-        document.getElementById("submit-btn").removeEventListener('click', endRound);
-
-        document.removeEventListener('click', ctrlSelect);
     } else if(endBoolean == 3) {
         gameOver();
     }
+}
+
+function revertBar() {
+    clearTimeout(progressTimer);
+    document.getElementById("progress-bar").style.backgroundColor = "#E63946";
+}
+
+function revertTitle() {
+    clearTimeout(titleTimer);
+    document.getElementById("target-title").textContent = "FIND";
+    document.getElementById("target-title").style.color = "#000000";
 }
 
 function gameOver() {
